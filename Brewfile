@@ -12,3 +12,5 @@ brew "gnupg"             # https://github.com/gpg/gnupg
 brew "lazygit"           # https://github.com/jesseduffield/lazygit
 brew "shellcheck"        # https://github.com/koalaman/shellcheck
 brew "wget"              # https://github.com/mirror/wget
+
+cask "visual-studio-code"
