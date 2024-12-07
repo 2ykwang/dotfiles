@@ -1,10 +1,11 @@
 import os
 import subprocess
- 
+
 BLUE = "\033[94m"
 GREEN = "\033[92m"
 YELLOW = "\033[93m"
 RESET = "\033[0m"
+
 
 def set_git_config(key, value):
     if value:
@@ -13,19 +14,30 @@ def set_git_config(key, value):
     else:
         print(f"{YELLOW}Skipped setting {key} (no value){RESET}")
 
+
 def prompt_user_input(prompt_message, default_value=None):
     prompt_message = f"{BLUE}{prompt_message}"
     if default_value:
         prompt_message += f" [{default_value}]: {RESET}"
     else:
         prompt_message += f": {RESET}"
-    
+
     user_input = input(prompt_message).strip()
     return user_input if user_input else default_value
 
-def main(): 
+
+def prompt_yes_no(question):
+    while True:
+        answer = input(f"{BLUE}{question} (y/n): {RESET}").strip().lower()
+        if answer in ["y", "n"]:
+            return answer == "y"
+
+        print(f"{YELLOW}Invalid input. Please enter 'y' or 'n'.{RESET}")
+
+
+def configure_git_user():
     print(f"{BLUE}Configuring git user settings...{RESET}")
- 
+
     git_username = prompt_user_input("Enter your Git username")
     git_email = prompt_user_input("Enter your Git email")
 
@@ -38,7 +50,13 @@ def main():
     set_git_config("user.name", git_username)
     set_git_config("user.email", git_email)
 
+
+def main():
+    if prompt_yes_no("Do you want to configure your git user settings?"):
+        configure_git_user()
+
     print(f"{GREEN}User configuration completed.{RESET}")
+
 
 if __name__ == "__main__":
     main()
