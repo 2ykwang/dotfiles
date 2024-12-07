@@ -37,5 +37,8 @@ clone_plugin_if_needed "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" "https://g
 ln -sf $BASE_DIR/.zshrc $HOME/.zshrc
 ln -sf $BASE_DIR/git/.gitignore $HOME/.gitignore
 
+# run the Python script to configure user settings
+python3 $BASE_DIR/configure.py
+
 echo "Reloading shell..."
 exec zsh
