@@ -18,6 +18,7 @@ brew "btop"                 # https://github.com/aristocratos/btop
 cask "visual-studio-code"   # https://github.com/Homebrew/homebrew-cask/blob/master/Casks/v/visual-studio-code.rb
 cask "hyper"                # https://github.com/vercel/hyper
 cask "docker"               # Docker desktop
+cask "postman"              # https://www.postman.com/
 
 # work
 cask "notion"
