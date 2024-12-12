@@ -13,11 +13,14 @@ brew "lazygit"              # https://github.com/jesseduffield/lazygit
 brew "shellcheck"           # https://github.com/koalaman/shellcheck
 brew "wget"                 # https://github.com/mirror/wget
 brew "btop"                 # https://github.com/aristocratos/btop  
+brew "bat"
+brew "navi"
 
 # dev tools
 cask "visual-studio-code"   # https://github.com/Homebrew/homebrew-cask/blob/master/Casks/v/visual-studio-code.rb
 cask "hyper"                # https://github.com/vercel/hyper
 cask "docker"               # Docker desktop
+cask "postman"              # https://www.postman.com/
 
 # work
 cask "notion"
