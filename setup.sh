@@ -34,6 +34,7 @@ clone_plugin_if_needed "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" "https
 clone_plugin_if_needed "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions.git"
 
 # Link dotfiles
+ln -sf $BASE_DIR/.vimrc $HOME/.vimrc
 ln -sf $BASE_DIR/.zshrc $HOME/.zshrc
 ln -sf $BASE_DIR/git/.gitignore $HOME/.gitignore
 
