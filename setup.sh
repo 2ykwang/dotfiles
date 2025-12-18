@@ -25,11 +25,11 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-# Logging
-log_info()    { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[OK]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARN]${NC} $1"; }
-log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
+# Logging (printf for better compatibility)
+log_info()    { printf "${BLUE}[INFO]${NC} %s\n" "$1"; }
+log_success() { printf "${GREEN}[OK]${NC} %s\n" "$1"; }
+log_warning() { printf "${YELLOW}[WARN]${NC} %s\n" "$1"; }
+log_error()   { printf "${RED}[ERROR]${NC} %s\n" "$1"; }
 
 error_exit() {
     log_error "$1"
@@ -45,19 +45,19 @@ link_dotfiles() {
     # Ensure directories exist
     mkdir -p "$HOME/.claude"
 
-    # Define links: source -> destination
+    # Define links: source|destination (using | as delimiter to avoid URL parsing issues)
     local links=(
-        "$BASE_DIR/.vimrc:$HOME/.vimrc"
-        "$BASE_DIR/.zshrc:$HOME/.zshrc"
-        "$BASE_DIR/tmux/tmux.conf:$HOME/.tmux.conf"
-        "$BASE_DIR/git/.gitignore:$HOME/.gitignore"
-        "$BASE_DIR/.claude/settings.json:$HOME/.claude/settings.json"
-        "$BASE_DIR/.claude/statusline-command.sh:$HOME/.claude/statusline-command.sh"
+        "$BASE_DIR/.vimrc|$HOME/.vimrc"
+        "$BASE_DIR/.zshrc|$HOME/.zshrc"
+        "$BASE_DIR/tmux/tmux.conf|$HOME/.tmux.conf"
+        "$BASE_DIR/git/.gitignore|$HOME/.gitignore"
+        "$BASE_DIR/.claude/settings.json|$HOME/.claude/settings.json"
+        "$BASE_DIR/.claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
     )
 
     for link in "${links[@]}"; do
-        local src="${link%%:*}"
-        local dst="${link##*:}"
+        local src="${link%%|*}"
+        local dst="${link##*|}"
 
         if [[ -f "$src" ]]; then
             ln -sf "$src" "$dst"
@@ -112,21 +112,25 @@ install_zsh_plugins() {
     local plugins_dir="$HOME/.oh-my-zsh/custom/plugins"
     mkdir -p "$plugins_dir"
 
-    # Plugin repositories
+    # Plugin: name|url (using | as delimiter)
     local plugins=(
-        "zsh-syntax-highlighting:https://github.com/zsh-users/zsh-syntax-highlighting.git"
-        "zsh-autosuggestions:https://github.com/zsh-users/zsh-autosuggestions.git"
+        "zsh-syntax-highlighting|https://github.com/zsh-users/zsh-syntax-highlighting.git"
+        "zsh-autosuggestions|https://github.com/zsh-users/zsh-autosuggestions.git"
+        "fzf-tab|https://github.com/Aloxaf/fzf-tab.git"
     )
 
     for plugin in "${plugins[@]}"; do
-        local name="${plugin%%:*}"
-        local url="${plugin##*:}"
+        local name="${plugin%%|*}"
+        local url="${plugin##*|}"
         local dir="$plugins_dir/$name"
 
         if [[ ! -d "$dir" ]]; then
             log_info "Installing $name..."
-            git clone --depth=1 "$url" "$dir" || log_warning "Failed to clone $name"
-            log_success "$name installed"
+            if git clone --depth=1 "$url" "$dir"; then
+                log_success "$name installed"
+            else
+                log_warning "Failed to clone $name"
+            fi
         else
             log_success "$name already installed"
         fi
