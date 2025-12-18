@@ -1,17 +1,17 @@
 export DOTFILES_DIR="$HOME/dotfiles"
 
 # Load environment variables
-source $DOTFILES_DIR/zsh/environment.zsh 
-
-# Load aliases
-source $DOTFILES_DIR/zsh/aliases.zsh
-source $DOTFILES_DIR/zsh/aliases-secret.zsh
+source "$DOTFILES_DIR/zsh/environment.zsh"
 
 # Load PATHs
-source $DOTFILES_DIR/zsh/paths.zsh 
+source "$DOTFILES_DIR/zsh/paths.zsh"
 
-# Load plugins
-source $DOTFILES_DIR/zsh/plugins.zsh
+# Load plugins (includes oh-my-zsh)
+source "$DOTFILES_DIR/zsh/plugins.zsh"
 
-# Load oh-my-zsh
-source $ZSH/oh-my-zsh.sh
+# Load fzf (after oh-my-zsh for fzf-tab to work)
+source "$DOTFILES_DIR/zsh/fzf.zsh"
+
+# Load aliases
+source "$DOTFILES_DIR/zsh/aliases.zsh"
+[[ -f "$DOTFILES_DIR/zsh/aliases-secret.zsh" ]] && source "$DOTFILES_DIR/zsh/aliases-secret.zsh"

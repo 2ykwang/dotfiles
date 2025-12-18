@@ -3,8 +3,10 @@ export ZSH="$HOME/.oh-my-zsh"
 export ZSH_THEME="nicoulaj"
 
 # Plugins (loaded by oh-my-zsh)
+# Note: fzf-tab must be loaded before zsh-autosuggestions and zsh-syntax-highlighting
 plugins=(
     git
+    fzf-tab
     zsh-autosuggestions
     zsh-syntax-highlighting
     zsh-interactive-cd
