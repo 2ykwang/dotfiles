@@ -1,45 +1,274 @@
-#!/bin/sh
+#!/bin/bash
+#
+# dotfiles setup script
+# Usage: ./setup.sh [OPTIONS]
+#
+# Options:
+#   --all       Run all setup steps (default if no option)
+#   --link      Create symlinks only
+#   --brew      Install Homebrew and packages only
+#   --plugins   Install ZSH plugins only
+#   --config    Run Git configuration only
+#   --help      Show this help message
+#
 
-BASE_DIR="$( cd "$( dirname "$0" )" && pwd )"
+set -e
 
-# Homebrew install
-echo "Checking and install brew if needed..."
-if ! command -v brew &> /dev/null; then
-  echo "brew not found. Installing..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-else
-  echo "brew already installed."
-fi
+# Configuration
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+VERBOSE=${VERBOSE:-false}
 
-# install bundle packages from Brewfile
-brew bundle --file=$BASE_DIR/Brewfile
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
 
-# install zsh plugins
-clone_plugin_if_needed() {
-  local plugin_dir="$1"
-  local repo_url="$2"
-  local plugin_name=$(basename "$plugin_dir")
+# Logging
+log_info()    { echo -e "${BLUE}[INFO]${NC} $1"; }
+log_success() { echo -e "${GREEN}[OK]${NC} $1"; }
+log_warning() { echo -e "${YELLOW}[WARN]${NC} $1"; }
+log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
 
-  if [ ! -d "$plugin_dir" ]; then
-    echo "Cloning $plugin_name..."
-    git clone "$repo_url" "$plugin_dir"
-  else
-    echo "$plugin_name already installed."
-  fi
+error_exit() {
+    log_error "$1"
+    exit 1
 }
 
-# Clone ZSH plugins
-echo "Checking and cloning plugins if needed..."
-clone_plugin_if_needed "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting.git"
-clone_plugin_if_needed "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions.git"
-
+# ============================================
 # Link dotfiles
-ln -sf $BASE_DIR/.vimrc $HOME/.vimrc
-ln -sf $BASE_DIR/.zshrc $HOME/.zshrc
-ln -sf $BASE_DIR/git/.gitignore $HOME/.gitignore
+# ============================================
+link_dotfiles() {
+    log_info "Creating symlinks..."
 
-# run the Python script to configure user settings
-python3 $BASE_DIR/configure.py
+    # Ensure directories exist
+    mkdir -p "$HOME/.claude"
 
-echo "Reloading shell..."
-exec zsh
+    # Define links: source -> destination
+    local links=(
+        "$BASE_DIR/.vimrc:$HOME/.vimrc"
+        "$BASE_DIR/.zshrc:$HOME/.zshrc"
+        "$BASE_DIR/tmux/tmux.conf:$HOME/.tmux.conf"
+        "$BASE_DIR/git/.gitignore:$HOME/.gitignore"
+        "$BASE_DIR/.claude/settings.json:$HOME/.claude/settings.json"
+        "$BASE_DIR/.claude/statusline-command.sh:$HOME/.claude/statusline-command.sh"
+    )
+
+    for link in "${links[@]}"; do
+        local src="${link%%:*}"
+        local dst="${link##*:}"
+
+        if [[ -f "$src" ]]; then
+            ln -sf "$src" "$dst"
+            log_success "Linked $(basename "$dst")"
+        else
+            log_warning "Source not found: $src"
+        fi
+    done
+}
+
+# ============================================
+# Install Homebrew and packages
+# ============================================
+install_brew() {
+    log_info "Checking Homebrew..."
+
+    if ! command -v brew &>/dev/null; then
+        log_info "Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
+            || error_exit "Failed to install Homebrew"
+
+        # Add brew to PATH for Apple Silicon
+        if [[ -f "/opt/homebrew/bin/brew" ]]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        fi
+        log_success "Homebrew installed"
+    else
+        log_success "Homebrew already installed"
+    fi
+
+    log_info "Installing packages from Brewfile..."
+    brew bundle --file="$BASE_DIR/Brewfile" || error_exit "Failed to install packages"
+    log_success "Packages installed"
+}
+
+# ============================================
+# Install ZSH plugins
+# ============================================
+install_zsh_plugins() {
+    log_info "Setting up ZSH plugins..."
+
+    # Install Oh-My-Zsh if not present
+    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+        log_info "Installing Oh-My-Zsh..."
+        RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+            || error_exit "Failed to install Oh-My-Zsh"
+        log_success "Oh-My-Zsh installed"
+    else
+        log_success "Oh-My-Zsh already installed"
+    fi
+
+    local plugins_dir="$HOME/.oh-my-zsh/custom/plugins"
+    mkdir -p "$plugins_dir"
+
+    # Plugin repositories
+    local plugins=(
+        "zsh-syntax-highlighting:https://github.com/zsh-users/zsh-syntax-highlighting.git"
+        "zsh-autosuggestions:https://github.com/zsh-users/zsh-autosuggestions.git"
+    )
+
+    for plugin in "${plugins[@]}"; do
+        local name="${plugin%%:*}"
+        local url="${plugin##*:}"
+        local dir="$plugins_dir/$name"
+
+        if [[ ! -d "$dir" ]]; then
+            log_info "Installing $name..."
+            git clone --depth=1 "$url" "$dir" || log_warning "Failed to clone $name"
+            log_success "$name installed"
+        else
+            log_success "$name already installed"
+        fi
+    done
+}
+
+# ============================================
+# Install Tmux plugins (TPM)
+# ============================================
+install_tmux_plugins() {
+    log_info "Setting up Tmux plugins..."
+
+    local tpm_dir="$HOME/.tmux/plugins/tpm"
+
+    # Install TPM if not present
+    if [[ ! -d "$tpm_dir" ]]; then
+        log_info "Installing TPM (Tmux Plugin Manager)..."
+        git clone --depth=1 https://github.com/tmux-plugins/tpm "$tpm_dir" \
+            || error_exit "Failed to install TPM"
+        log_success "TPM installed"
+    else
+        log_success "TPM already installed"
+    fi
+
+    # Install plugins if tmux is available
+    if command -v tmux &>/dev/null; then
+        log_info "Installing tmux plugins..."
+        "$tpm_dir/bin/install_plugins" || log_warning "Failed to install tmux plugins"
+        log_success "Tmux plugins installed"
+    else
+        log_warning "tmux not found, skipping plugin installation"
+        log_info "Run 'prefix + I' in tmux to install plugins later"
+    fi
+}
+
+# ============================================
+# Install all plugins (ZSH + Tmux)
+# ============================================
+install_plugins() {
+    install_zsh_plugins
+    install_tmux_plugins
+}
+
+# ============================================
+# Configure Git and personal settings
+# ============================================
+configure_git() {
+    log_info "Setting up Git configuration..."
+
+    # Ignore local changes to personal files
+    git -C "$BASE_DIR" update-index --skip-worktree zsh/aliases-secret.zsh 2>/dev/null || true
+    git -C "$BASE_DIR" update-index --skip-worktree CLAUDE.md 2>/dev/null || true
+
+    # Run interactive configuration
+    if [[ -f "$BASE_DIR/configure.py" ]]; then
+        python3 "$BASE_DIR/configure.py"
+    fi
+
+    log_success "Git configuration complete"
+}
+
+# ============================================
+# Show help
+# ============================================
+show_help() {
+    cat << EOF
+dotfiles setup script
+
+Usage: ./setup.sh [OPTIONS]
+
+Options:
+  --all       Run all setup steps (default)
+  --link      Create symlinks only
+  --brew      Install Homebrew and packages only
+  --plugins   Install ZSH plugins only
+  --config    Run Git configuration only
+  --help      Show this help message
+
+Examples:
+  ./setup.sh              # Full installation
+  ./setup.sh --link       # Only create symlinks
+  ./setup.sh --brew       # Only install packages
+EOF
+}
+
+# ============================================
+# Main
+# ============================================
+main() {
+    local do_all=false
+    local do_link=false
+    local do_brew=false
+    local do_plugins=false
+    local do_config=false
+
+    # Parse arguments
+    if [[ $# -eq 0 ]]; then
+        do_all=true
+    fi
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --all)     do_all=true ;;
+            --link)    do_link=true ;;
+            --brew)    do_brew=true ;;
+            --plugins) do_plugins=true ;;
+            --config)  do_config=true ;;
+            --help)    show_help; exit 0 ;;
+            *)         log_error "Unknown option: $1"; show_help; exit 1 ;;
+        esac
+        shift
+    done
+
+    echo ""
+    echo "================================"
+    echo "  dotfiles setup"
+    echo "================================"
+    echo ""
+
+    if $do_all || $do_link; then
+        link_dotfiles
+    fi
+
+    if $do_all || $do_brew; then
+        install_brew
+    fi
+
+    if $do_all || $do_plugins; then
+        install_plugins
+    fi
+
+    if $do_all || $do_config; then
+        configure_git
+    fi
+
+    echo ""
+    log_success "Setup complete!"
+
+    if $do_all; then
+        log_info "Reloading shell..."
+        exec zsh
+    fi
+}
+
+main "$@"

@@ -1,18 +1,18 @@
-# Plugins
+# Oh-My-Zsh configuration
+export ZSH="$HOME/.oh-my-zsh"
+export ZSH_THEME="nicoulaj"
+
+# Plugins (loaded by oh-my-zsh)
 plugins=(
-    git 
-    zsh-autosuggestions 
+    git
+    zsh-autosuggestions
     zsh-syntax-highlighting
-    zsh-interactive-cd 
+    zsh-interactive-cd
     alias-finder
 )
 
+# Plugin settings
 zstyle ':omz:plugins:alias-finder' autoload yes
 
-# 플러그인 초기화
-source ~/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/.oh-my-zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# Source oh-my-zsh
-export ZSH_THEME="nicoulaj"
-export ZSH="$HOME/.oh-my-zsh" 
+# Load Oh-My-Zsh
+[[ -f "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"

@@ -1,32 +1,39 @@
 # =====================================
-# Brewfile
+# Brewfile - Homebrew packages
 # =====================================
-tap "homebrew/bundle"       # https://github.com/Homebrew/homebrew-bundle
-tap "homebrew/services"     # https://github.com/Homebrew/homebrew-services
 
-# cli tools
-brew "fzf"                  # https://github.com/junegunn/fzf
-brew "git"                  # https://github.com/git/git
-brew "pinentry"             # https://github.com/GPGTools/pinentry-mac
-brew "gnupg"                # https://github.com/gpg/gnupg
-brew "lazygit"              # https://github.com/jesseduffield/lazygit
-brew "shellcheck"           # https://github.com/koalaman/shellcheck
-brew "wget"                 # https://github.com/mirror/wget
-brew "btop"                 # https://github.com/aristocratos/btop  
-brew "bat"
-brew "navi"
+tap "homebrew/bundle"
+tap "homebrew/services"
 
-# dev tools
-cask "visual-studio-code"   # https://github.com/Homebrew/homebrew-cask/blob/master/Casks/v/visual-studio-code.rb
-cask "hyper"                # https://github.com/vercel/hyper
-cask "docker"               # Docker desktop
-cask "postman"              # https://www.postman.com/
+# CLI tools
+brew "bat"                  # Cat with syntax highlighting
+brew "btop"                 # Resource monitor
+brew "fzf"                  # Fuzzy finder
+brew "git"                  # Version control
+brew "gnupg"                # GPG encryption
+brew "jq"                   # JSON processor (for statusline)
+brew "lazygit"              # Git TUI
+brew "navi"                 # Interactive cheatsheet
+brew "node"                 # Node.js
+brew "pinentry"             # GPG pin entry
+brew "shellcheck"           # Shell script linter
+brew "tmux"                 # Terminal multiplexer
+brew "wget"                 # File downloader
 
-# work
-cask "notion"
-cask "notion-calendar"
-cask "slack"
- 
-# utilities
-cask "alt-tab"              # https://alt-tab-macos.netlify.app/
-cask "chatgpt"              # https://formulae.brew.sh/cask/chatgpt
+# Dev tools
+cask "docker"               # Container platform
+cask "hyper"                # Terminal emulator
+cask "postman"              # API client
+cask "visual-studio-code"   # Code editor
+
+# Productivity
+cask "notion"               # Note-taking
+cask "slack"                # Team communication
+
+# Utilities
+cask "alt-tab"              # Window switcher
+cask "chatgpt"              # AI assistant
+cask "ghostty"              # Terminal emulator
+
+# Fonts
+cask "font-d2coding"        # D2Coding font
