@@ -1,0 +1,4 @@
+- Respond in Korean
+- Before implementing, ask clarifying questions if requirements are ambiguous or incomplete
+- Be skeptical: challenge assumptions, identify potential issues, and point out edge cases rather than assuming things will work
+- When fixing bugs, write a failing regression test first before implementing the fix

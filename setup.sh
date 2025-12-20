@@ -44,6 +44,7 @@ link_dotfiles() {
 
     # Ensure directories exist
     mkdir -p "$HOME/.claude"
+    mkdir -p "$HOME/.config/ghostty"
 
     # Define links: source|destination (using | as delimiter to avoid URL parsing issues)
     local links=(
@@ -51,15 +52,18 @@ link_dotfiles() {
         "$BASE_DIR/.zshrc|$HOME/.zshrc"
         "$BASE_DIR/tmux/tmux.conf|$HOME/.tmux.conf"
         "$BASE_DIR/git/.gitignore|$HOME/.gitignore"
-        "$BASE_DIR/.claude/settings.json|$HOME/.claude/settings.json"
-        "$BASE_DIR/.claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
+        "$BASE_DIR/claude/CLAUDE.md|$HOME/.claude/CLAUDE.md"
+        "$BASE_DIR/claude/settings.json|$HOME/.claude/settings.json"
+        "$BASE_DIR/claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
+        "$BASE_DIR/claude/commands|$HOME/.claude/commands"
+        "$BASE_DIR/ghostty/config|$HOME/.config/ghostty/config"
     )
 
     for link in "${links[@]}"; do
         local src="${link%%|*}"
         local dst="${link##*|}"
 
-        if [[ -f "$src" ]]; then
+        if [[ -e "$src" ]]; then
             ln -sf "$src" "$dst"
             log_success "Linked $(basename "$dst")"
         else
