@@ -1,6 +1,6 @@
 ---
-description: Check if an issue is a duplicate and find related issues/PRs
-argument-hint: <issue-number or GitHub URL>
+description: 이슈가 중복인지 확인하고 관련 이슈/PR을 찾습니다 (user)
+argument-hint: <issue-number 또는 GitHub URL>
 allowed-tools: Bash(gh issue:*), Bash(gh search:*), Bash(gh pr:*), Bash(gh api:*), Bash(gh repo:*)
 ---
 

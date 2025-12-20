@@ -1,45 +1,47 @@
-# Claude Code Configuration
+# Claude Code 설정
 
-Claude Code settings and custom commands managed via dotfiles.
+dotfiles로 관리하는 Claude Code 설정 및 커스텀 커맨드.
 
-## Structure
+## 구조
 
 ```
 claude/
-├── CLAUDE.md              # Global memory (personal preferences)
-├── settings.json          # Claude Code settings
-├── statusline-command.sh  # Statusline integration script
-├── commands/              # Custom slash commands
-│   ├── gh-issue.md        # /gh-issue - Analyze GitHub issues
-│   ├── gh-pr.md           # /gh-pr - Analyze PRs with code review
-│   └── gh-review.md       # /gh-review - Summarize PR reviews
+├── CLAUDE.md              # 전역 메모리 (개인 설정)
+├── settings.json          # Claude Code 설정
+├── statusline-command.sh  # 상태바 연동 스크립트
+├── commands/              # 커스텀 슬래시 커맨드
+│   ├── gh-issue.md        # /gh-issue - GitHub 이슈 분석
+│   ├── gh-pr.md           # /gh-pr - PR 분석 및 코드 리뷰
+│   ├── gh-review.md       # /gh-review - PR 리뷰 요약
+│   └── gh-check-duplicate-issues.md  # /gh-check-duplicate-issues - 중복 이슈 확인
 └── README.md
 ```
 
-## Setup
+## 설치
 
-The `setup.sh` script creates symlinks from `~/.claude/` to this directory:
+`setup.sh` 스크립트가 `~/.claude/`에서 이 디렉토리로 심볼릭 링크를 생성한다:
 
 ```bash
-~/.claude/CLAUDE.md          → dotfiles/claude/CLAUDE.md
-~/.claude/settings.json      → dotfiles/claude/settings.json
+~/.claude/CLAUDE.md             → dotfiles/claude/CLAUDE.md
+~/.claude/settings.json         → dotfiles/claude/settings.json
 ~/.claude/statusline-command.sh → dotfiles/claude/statusline-command.sh
-~/.claude/commands/          → dotfiles/claude/commands/
+~/.claude/commands/             → dotfiles/claude/commands/
 ```
 
-## Custom Commands
+## 커스텀 커맨드
 
-| Command | Description |
-|---------|-------------|
-| `/gh-issue <number\|URL>` | Analyze and summarize a GitHub issue |
-| `/gh-pr <number\|URL>` | Analyze a PR and provide code review |
-| `/gh-review <number\|URL>` | Summarize review comments on a PR |
+| 커맨드 | 설명 |
+|--------|------|
+| `/gh-issue <번호\|URL>` | GitHub 이슈 분석 및 요약 |
+| `/gh-pr <번호\|URL>` | PR 분석 및 코드 리뷰 제공 |
+| `/gh-review <번호\|URL>` | PR 리뷰 코멘트 요약 |
+| `/gh-check-duplicate-issues <번호\|URL>` | 중복 이슈 여부 확인 |
 
-## Global Memory (CLAUDE.md)
+## 전역 메모리 (CLAUDE.md)
 
-Personal preferences applied to all projects:
+모든 프로젝트에 적용되는 개인 설정:
 
-- Response language
-- Communication style
-- Code review preferences
-- Testing practices
+- 응답 언어
+- 커뮤니케이션 스타일
+- 코드 리뷰 선호사항
+- 테스트 관행
