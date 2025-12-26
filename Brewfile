@@ -2,6 +2,7 @@
 # Brewfile - Homebrew packages
 # =====================================
 
+tap "derailed/k9s"
 tap "homebrew/bundle"
 tap "homebrew/services"
 
@@ -25,8 +26,28 @@ brew "shellcheck"           # Shell script linter
 brew "tmux"                 # Terminal multiplexer
 brew "wget"                 # File downloader
 
+# AWS & Cloud
+brew "awscli"               # AWS CLI
+brew "gimme-aws-creds"      # AWS credentials helper
+
+# Kubernetes
+brew "kubectx"              # Kubernetes context/namespace switcher
+brew "derailed/k9s/k9s"     # Kubernetes TUI
+
+# Python
+brew "pipenv"               # Python virtualenv management
+brew "pyenv"                # Python version manager
+
+# Database
+brew "libpq"                # PostgreSQL client library
+brew "mysql"                # MySQL database
+
 # Dev tools
-cask "docker"               # Container platform
+brew "docker-compose"       # Docker Compose
+cask "cursor"               # AI code editor
+cask "docker-desktop"       # Container platform
+cask "figma"                # Design tool
+cask "httpie-desktop"       # HTTPie desktop app
 cask "visual-studio-code"   # Code editor
 
 # Productivity
@@ -37,8 +58,10 @@ cask "slack"                # Team communication
 # Utilities
 cask "alt-tab"              # Window switcher
 cask "chatgpt"              # AI assistant
+cask "claude"               # Claude desktop app
 cask "claude-code"          # Claude Code CLI
 cask "ghostty"              # Terminal emulator
+cask "rectangle"            # Window manager
 
 # Fonts
 cask "font-d2coding"        # D2Coding font

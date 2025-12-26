@@ -64,7 +64,7 @@ link_dotfiles() {
         local dst="${link##*|}"
 
         if [[ -e "$src" ]]; then
-            ln -sf "$src" "$dst"
+            ln -sfn "$src" "$dst"
             log_success "Linked $(basename "$dst")"
         else
             log_warning "Source not found: $src"
