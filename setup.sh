@@ -184,6 +184,9 @@ install_plugins() {
 configure_git() {
     log_info "Setting up Git configuration..."
 
+    # Set global gitignore (not a default, must be explicit)
+    git config --global core.excludesfile ~/.gitignore
+
     # Ignore local changes to personal files
     git -C "$BASE_DIR" update-index --skip-worktree zsh/aliases-secret.zsh 2>/dev/null || true
     git -C "$BASE_DIR" update-index --skip-worktree CLAUDE.md 2>/dev/null || true
