@@ -20,7 +20,8 @@ brew "lazygit"              # Git TUI
 brew "mitmproxy"            # HTTP proxy tool
 brew "navi"                 # Interactive cheatsheet
 brew "node"                 # Node.js
-brew "pinentry"             # GPG pin entry
+brew "pinentry"             # GPG pin entry (terminal)
+brew "pinentry-mac"         # GPG pin entry (macOS GUI/IDE)
 brew "pipx"                 # Python app installer
 brew "shellcheck"           # Shell script linter
 brew "tmux"                 # Terminal multiplexer

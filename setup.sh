@@ -45,6 +45,8 @@ link_dotfiles() {
     # Ensure directories exist
     mkdir -p "$HOME/.claude"
     mkdir -p "$HOME/.config/ghostty"
+    mkdir -p "$HOME/.gnupg"
+    chmod 700 "$HOME/.gnupg"
 
     # Define links: source|destination (using | as delimiter to avoid URL parsing issues)
     local links=(
@@ -57,6 +59,7 @@ link_dotfiles() {
         "$BASE_DIR/claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
         "$BASE_DIR/claude/commands|$HOME/.claude/commands"
         "$BASE_DIR/ghostty/config|$HOME/.config/ghostty/config"
+        "$BASE_DIR/gnupg/gpg-agent.conf|$HOME/.gnupg/gpg-agent.conf"
     )
 
     for link in "${links[@]}"; do
