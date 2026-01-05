@@ -4,6 +4,11 @@
     "type": "command",
     "command": "~/.claude/statusline-command.sh"
   },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "serena@claude-plugins-official": true,
+    "claude-mem@thedotmack": true
+  },
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754086736007
