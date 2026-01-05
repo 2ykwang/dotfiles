@@ -1,0 +1,17 @@
+# Default shell for zsh files
+shell=bash
+
+# SC2148: Tips depend on target shell (no shebang) - zsh files don't need shebang
+disable=SC2148
+
+# SC2034: Variable appears unused - plugins is used by oh-my-zsh
+disable=SC2034
+
+# SC2016: Expressions don't expand in single quotes - $realpath is expanded by fzf-tab
+disable=SC2016
+
+# SC2155: Declare and assign separately - common pattern in zsh
+disable=SC2155
+
+# SC1090,SC1091: Can't follow non-constant/external source
+disable=SC1090,SC1091

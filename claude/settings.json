@@ -7,7 +7,8 @@
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
     "serena@claude-plugins-official": true,
-    "claude-mem@thedotmack": true
+    "claude-mem@thedotmack": true,
+    "ralph-wiggum@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {

@@ -58,6 +58,7 @@ link_dotfiles() {
         "$BASE_DIR/claude/settings.json|$HOME/.claude/settings.json"
         "$BASE_DIR/claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
         "$BASE_DIR/claude/commands|$HOME/.claude/commands"
+        "$BASE_DIR/claude/agents|$HOME/.claude/agents"
         "$BASE_DIR/ghostty/config|$HOME/.config/ghostty/config"
         "$BASE_DIR/gnupg/gpg-agent.conf|$HOME/.gnupg/gpg-agent.conf"
     )
