@@ -2,6 +2,7 @@
 # Brewfile - Homebrew packages
 # =====================================
 
+tap "2ykwang/mac-cleanup-go"
 tap "derailed/k9s"
 tap "homebrew/bundle"
 tap "homebrew/services"
@@ -45,6 +46,8 @@ brew "mysql"                # MySQL database
 
 # Dev tools
 brew "docker-compose"       # Docker Compose
+brew "go"                   # Go programming language
+brew "2ykwang/mac-cleanup-go/mac-cleanup-go"  # macOS cleanup utility
 cask "cursor"               # AI code editor
 cask "docker-desktop"       # Container platform
 cask "figma"                # Design tool
@@ -61,6 +64,7 @@ cask "alt-tab"              # Window switcher
 cask "chatgpt"              # AI assistant
 cask "claude"               # Claude desktop app
 cask "claude-code"          # Claude Code CLI
+cask "codex"                # OpenAI Codex CLI
 cask "ghostty"              # Terminal emulator
 cask "rectangle"            # Window manager
 
