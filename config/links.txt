@@ -1,0 +1,26 @@
+# Symlink definitions
+# Format: source|destination
+# Lines starting with # are ignored
+
+# Shell
+.vimrc|$HOME/.vimrc
+.zshrc|$HOME/.zshrc
+
+# Tmux
+tmux/tmux.conf|$HOME/.tmux.conf
+
+# Git
+git/.gitignore|$HOME/.gitignore
+
+# Claude
+claude/CLAUDE.md|$HOME/.claude/CLAUDE.md
+claude/settings.json|$HOME/.claude/settings.json
+claude/statusline-command.sh|$HOME/.claude/statusline-command.sh
+claude/commands|$HOME/.claude/commands
+claude/agents|$HOME/.claude/agents
+
+# Ghostty
+ghostty/config|$HOME/.config/ghostty/config
+
+# GPG
+gnupg/gpg-agent.conf|$HOME/.gnupg/gpg-agent.conf
