@@ -15,3 +15,8 @@ source "$DOTFILES_DIR/zsh/fzf.zsh"
 # Load aliases
 source "$DOTFILES_DIR/zsh/aliases.zsh"
 [[ -f "$DOTFILES_DIR/zsh/aliases-secret.zsh" ]] && source "$DOTFILES_DIR/zsh/aliases-secret.zsh"
+
+# Fortune with cowsay on terminal start (async)
+if command -v fortune &> /dev/null && command -v cowsay &> /dev/null; then
+    { fortune | cowsay } &!
+fi

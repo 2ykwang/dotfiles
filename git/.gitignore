@@ -10,3 +10,7 @@ Thumbs.db
 .specify/
 specs/
 .serena/
+.ipython/
+.jupyter/
+my-profile-data/
+pyinstrument-profile/
