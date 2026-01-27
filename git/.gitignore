@@ -14,3 +14,4 @@ specs/
 .jupyter/
 my-profile-data/
 pyinstrument-profile/
+_docs/
