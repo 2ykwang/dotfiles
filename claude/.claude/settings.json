@@ -1,9 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "model": "sonnet[1m]",
   "statusLine": {
     "type": "command",
-    "command": "python3 /Users/youngkwangyang/dotfiles/claude/statusline.py"
+    "command": "python3 ~/dotfiles/scripts/statusline.py"
   },
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
@@ -14,5 +13,6 @@
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754086736007
-  }
+  },
+  "model": "opus"
 }

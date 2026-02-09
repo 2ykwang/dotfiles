@@ -1,28 +1,19 @@
 # ~/.config/ghostty/config
 
-# 폰트 설정 (Hyper랑 비슷하게)
 font-family = "D2Coding"
 font-size = 13
 font-thicken = true
 
-# 근데 이왕이면 이쁜 폰트로 갈아타는 거 추천 👇
-# font-family = "JetBrains Mono"
-# font-family = "Fira Code"
-
-# 라인/글자 간격 (Hyper 기본값이랑 동일)
 adjust-cell-height = 0
 
-# 커서 (Hyper에서 쓰던 핑크 커서!)
 cursor-style = block
 cursor-color = #f81ce5
 # cursor-style-blink = true  # 블링크 원하면 주석 해제
 
-# Aura Theme 비슷한 컬러 (다크 + 퍼플 계열)
 background = #15141b
 foreground = #edecee
 selection-background = #f81ce5
 
-# 팔레트 (Aura 기반)
 palette = 0=#110f18
 palette = 1=#ff6767
 palette = 2=#61ffca
@@ -46,7 +37,7 @@ window-padding-y = 12
 window-decoration = true
 macos-titlebar-style = native
 
-# 투명도 (살짝 힙하게)
+# 투명도
 background-opacity = 0.95
 
 # macOS 설정

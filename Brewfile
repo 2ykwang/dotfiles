@@ -3,11 +3,11 @@
 # =====================================
 
 tap "2ykwang/2ykwang"
-tap "anomalyco/tap"
 tap "derailed/k9s"
 
 # CLI tools
 brew "bat"                  # Cat with syntax highlighting
+brew "eza"                  # Modern ls replacement
 brew "btop"                 # Resource monitor
 brew "cowsay"               # ASCII art message generator
 brew "fortune"              # Random quotes
@@ -28,6 +28,7 @@ brew "pinentry"             # GPG pin entry (terminal)
 brew "pinentry-mac"         # GPG pin entry (macOS GUI/IDE)
 brew "pipx"                 # Python app installer
 brew "shellcheck"           # Shell script linter
+brew "stow"                 # Symlink farm manager
 brew "tmux"                 # Terminal multiplexer
 brew "wget"                 # File downloader
 

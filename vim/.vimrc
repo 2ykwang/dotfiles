@@ -1,4 +1,4 @@
-"tab size"
+" Tab size
 set ts=4
 set sts=4
 set shiftwidth=4

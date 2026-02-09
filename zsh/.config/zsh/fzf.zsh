@@ -2,6 +2,13 @@
 # fzf configuration
 # =====================================
 
+# Directory listing command (eza > ls)
+if command -v eza &>/dev/null; then
+    _fzf_ls="eza -la --color=always"
+else
+    _fzf_ls="ls -laG"
+fi
+
 # fzf 기본 옵션
 export FZF_DEFAULT_OPTS="
   --height=40%
@@ -16,20 +23,20 @@ export FZF_CTRL_T_OPTS="
   --preview 'bat --style=numbers --color=always --line-range=:500 {} 2>/dev/null || cat {}'
 "
 
-# Alt+C: 디렉터리 이동 (tree 프리뷰)
+# Alt+C: 디렉터리 이동 (eza/ls 프리뷰)
 export FZF_ALT_C_OPTS="
-  --preview 'ls -la --color=always {} | head -50'
+  --preview '$_fzf_ls {} | head -50'
 "
 
 # fzf-tab: tab completion을 fzf로 대체
-# 디렉터리 프리뷰 (ls)
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -la --color=always $realpath'
-zstyle ':fzf-tab:complete:ls:*' fzf-preview 'ls -la --color=always $realpath 2>/dev/null || bat --style=numbers --color=always $realpath 2>/dev/null'
+# 디렉터리 프리뷰
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -la --color=always $realpath 2>/dev/null || ls -laG $realpath'
+zstyle ':fzf-tab:complete:ls:*' fzf-preview 'eza -la --color=always $realpath 2>/dev/null || bat --style=numbers --color=always $realpath 2>/dev/null'
 
 # 파일 프리뷰 (bat)
 zstyle ':fzf-tab:complete:*:*' fzf-preview '
   if [[ -d $realpath ]]; then
-    ls -la --color=always $realpath
+    eza -la --color=always $realpath 2>/dev/null || ls -laG $realpath
   elif [[ -f $realpath ]]; then
     bat --style=numbers --color=always --line-range=:200 $realpath 2>/dev/null || cat $realpath
   fi
