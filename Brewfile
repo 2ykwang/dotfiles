@@ -2,7 +2,6 @@
 # Brewfile - Homebrew packages
 # =====================================
 
-tap "2ykwang/2ykwang"
 tap "derailed/k9s"
 
 # CLI tools
@@ -17,8 +16,10 @@ brew "gh"                   # GitHub CLI
 brew "git"                  # Version control
 brew "gnupg"                # GPG encryption
 brew "httpie"               # HTTP client
+brew "hurl"                 # HTTP request runner
 brew "jq"                   # JSON processor (for statusline)
 brew "just"                 # Command runner (Makefile alternative)
+brew "lazydocker"           # Docker TUI
 brew "lazygit"              # Git TUI
 brew "gemini-cli"           # Google Gemini CLI
 brew "glances"              # System monitoring tool
@@ -27,6 +28,7 @@ brew "node"                 # Node.js
 brew "pinentry"             # GPG pin entry (terminal)
 brew "pinentry-mac"         # GPG pin entry (macOS GUI/IDE)
 brew "pipx"                 # Python app installer
+brew "ripgrep"              # Fast recursive search
 brew "shellcheck"           # Shell script linter
 brew "stow"                 # Symlink farm manager
 brew "tmux"                 # Terminal multiplexer
@@ -53,7 +55,7 @@ brew "docker-compose"       # Docker Compose
 brew "go"                   # Go programming language
 brew "golangci-lint"        # Go linter
 brew "gopls"                # Go language server
-brew "2ykwang/2ykwang/mac-cleanup-go"  # macOS cleanup utility
+brew "mac-cleanup-go"       # macOS cleanup utility
 cask "cursor"               # AI code editor
 cask "docker-desktop"       # Container platform
 cask "figma"                # Design tool
@@ -74,6 +76,7 @@ cask "claude-code"          # Claude Code CLI
 cask "codex"                # OpenAI Codex CLI
 cask "ghostty"              # Terminal emulator
 cask "rectangle"            # Window manager
+cask "spotify"              # Music streaming
 
 # Fonts
 cask "font-d2coding"        # D2Coding font
