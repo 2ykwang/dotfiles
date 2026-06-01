@@ -21,3 +21,5 @@ source "$ZSH_CONFIG/aliases.zsh"
 if command -v fortune &>/dev/null && command -v cowsay &>/dev/null; then
     fortune | cowsay
 fi
+
+eval "$(direnv hook zsh)"

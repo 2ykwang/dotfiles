@@ -1,5 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "statusLine": {
     "type": "command",
     "command": "python3 ~/dotfiles/scripts/statusline.py"
@@ -8,11 +11,34 @@
     "context7@claude-plugins-official": true,
     "serena@claude-plugins-official": true,
     "ralph-loop@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true
+    "gopls-lsp@claude-plugins-official": true,
+    "html-visual@2ykwang-agent-skills": true,
+    "swift-lsp@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "Notion@claude-plugins-official": true,
+    "slack@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "notion@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "check-agent-doc@2ykwang-agent-skills": true,
+    "decision-board@2ykwang-agent-skills": true
   },
+  "extraKnownMarketplaces": {
+    "2ykwang-agent-skills": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/2ykwang/agent-skills.git"
+      }
+    }
+  },
+  "language": "Korean",
   "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark-daltonized",
+  "autoCompactEnabled": false,
+  "remoteControlAtStartup": false,
   "feedbackSurveyState": {
     "lastShownTime": 1754086736007
-  },
-  "model": "opus"
+  }
 }

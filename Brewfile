@@ -3,12 +3,15 @@
 # =====================================
 
 tap "derailed/k9s"
+tap "manaflow-ai/cmux"
 
 # CLI tools
 brew "bat"                  # Cat with syntax highlighting
 brew "eza"                  # Modern ls replacement
 brew "btop"                 # Resource monitor
 brew "cowsay"               # ASCII art message generator
+brew "direnv"               # Per-directory environment loader
+brew "ffmpeg"               # Media converter
 brew "fortune"              # Random quotes
 brew "fzf"                  # Fuzzy finder
 brew "git-delta"            # Git diff viewer (used by git config)
@@ -52,15 +55,19 @@ brew "mysql"                # MySQL database
 
 # Dev tools
 brew "docker-compose"       # Docker Compose
+brew "dive"                 # Docker image layer explorer
 brew "go"                   # Go programming language
 brew "golangci-lint"        # Go linter
 brew "gopls"                # Go language server
 brew "mac-cleanup-go"       # macOS cleanup utility
+cask "cmux"                 # Terminal multiplexer for coding agents
 cask "cursor"               # AI code editor
+cask "cursor-cli"           # Cursor CLI
 cask "docker-desktop"       # Container platform
 cask "figma"                # Design tool
 cask "httpie-desktop"       # HTTPie desktop app
 cask "mitmproxy"            # HTTP proxy tool
+cask "ngrok"                # Secure tunneling
 cask "visual-studio-code"   # Code editor
 
 # Productivity
@@ -71,8 +78,6 @@ cask "slack"                # Team communication
 # Utilities
 cask "alt-tab"              # Window switcher
 cask "chatgpt"              # AI assistant
-cask "claude"               # Claude desktop app
-cask "claude-code"          # Claude Code CLI
 cask "codex"                # OpenAI Codex CLI
 cask "ghostty"              # Terminal emulator
 cask "rectangle"            # Window manager
@@ -80,3 +85,12 @@ cask "spotify"              # Music streaming
 
 # Fonts
 cask "font-d2coding"        # D2Coding font
+
+# uv (Python tools)
+uv "specify-cli"            # Spec-driven development CLI
+uv "sqlit-tui"             # SQLite TUI
+
+# npm (global packages)
+npm "@ast-grep/napi"        # Structural code search
+npm "oh-my-claude-sisyphus" # Claude tooling
+npm "pnpm"                  # Fast package manager
