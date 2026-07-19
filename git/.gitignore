@@ -14,3 +14,5 @@ Thumbs.db
 my-profile-data/
 pyinstrument-profile/
 _docs/
+
+**/.claude/settings.local.json
