@@ -1,3 +1,4 @@
 git/.gitconfig
 .serena/
 .claude/settings.*.json
+zsh/.config/zsh/aliases-secret.zsh

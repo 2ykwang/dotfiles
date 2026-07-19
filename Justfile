@@ -36,8 +36,3 @@ plugins:
 # Configure git user settings (interactive)
 configure:
     @bash scripts/configure.sh
-
-# Update skip-worktree for secret files
-secrets:
-    @git update-index --skip-worktree zsh/.config/zsh/aliases-secret.zsh 2>/dev/null || true
-    @echo "Secret files marked as skip-worktree"
