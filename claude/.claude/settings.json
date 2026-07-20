@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "cleanupPeriodDays": 36500,
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
@@ -22,13 +23,23 @@
     "notion@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
     "check-agent-doc@2ykwang-agent-skills": true,
-    "decision-board@2ykwang-agent-skills": true
+    "decision-board@2ykwang-agent-skills": true,
+    "ponytail@ponytail": true,
+    "vercel@claude-plugins-official": true,
+    "write-pr@2ykwang-agent-skills": true,
+    "quick-pr@2ykwang-agent-skills": true
   },
   "extraKnownMarketplaces": {
     "2ykwang-agent-skills": {
       "source": {
-        "source": "git",
-        "url": "https://github.com/2ykwang/agent-skills.git"
+        "source": "github",
+        "repo": "2ykwang/agent-skills"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
       }
     }
   },
@@ -38,7 +49,8 @@
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "theme": "dark-daltonized",
+  "theme": "dark-ansi",
+  "verbose": false,
   "autoCompactEnabled": false,
   "remoteControlAtStartup": false,
   "feedbackSurveyState": {
