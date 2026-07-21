@@ -6,44 +6,48 @@ font-thicken = true
 
 adjust-cell-height = 0
 
+# Colors from the Zed "macOS Classic Dark" theme.
+# blue and cyan aren't blue here — the palette is amber/gold by design.
+
 cursor-style = block
-cursor-color = #f81ce5
-# cursor-style-blink = true  # 블링크 원하면 주석 해제
+cursor-color = #72cffe
+cursor-style-blink = true
 
-background = #15141b
-foreground = #edecee
-selection-background = #f81ce5
+background = #131313
+foreground = #DDDDDD
+selection-background = #353436
+selection-foreground = #DDDDDD
 
-palette = 0=#110f18
-palette = 1=#ff6767
-palette = 2=#61ffca
-palette = 3=#ffca85
-palette = 4=#a277ff
-palette = 5=#f694ff
-palette = 6=#61ffca
-palette = 7=#edecee
-palette = 8=#4d4d4d
-palette = 9=#ff6767
-palette = 10=#61ffca
-palette = 11=#ffca85
-palette = 12=#a277ff
-palette = 13=#f694ff
-palette = 14=#61ffca
-palette = 15=#edecee
+palette = 0=#131313
+palette = 1=#c74028
+palette = 2=#62BA46
+palette = 3=#ded9b7
+palette = 4=#c28b12
+palette = 5=#c72855
+palette = 6=#fdd888
+palette = 7=#DDDDDD
+palette = 8=#57564F
+palette = 9=#e7988a
+palette = 10=#b0dca2
+palette = 11=#f0edde
+palette = 12=#f1c464
+palette = 13=#efb0c2
+palette = 14=#fef1d5
+palette = 15=#FFFFFF
 
-# 윈도우 설정
+# Window
 window-padding-x = 14
 window-padding-y = 12
 window-decoration = true
 macos-titlebar-style = native
 
-# 투명도
+# Transparency
 background-opacity = 0.95
 
-# macOS 설정
+# macOS
 macos-option-as-alt = true
 
-# 기타 편의 설정
+# Misc
 copy-on-select = false
 confirm-close-surface = false
 shell-integration = zsh
