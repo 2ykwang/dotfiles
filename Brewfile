@@ -20,6 +20,7 @@ brew "fzf"                  # Fuzzy finder
 brew "git-delta"            # Git diff viewer (used by git config)
 brew "gh"                   # GitHub CLI
 brew "git"                  # Version control
+brew "herdr"                # Terminal agent multiplexer
 brew "git-lfs"              # Git large file storage
 brew "gnupg"                # GPG encryption
 brew "httpie"               # HTTP client
