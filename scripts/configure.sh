@@ -28,15 +28,24 @@ configure_gpg_key() {
         return
     fi
 
+    # Default to the key already configured so pressing enter keeps it
+    local current_key default_choice=1
+    current_key=$(git config --global user.signingkey 2>/dev/null || true)
+
     info "Available GPG keys:"
     for i in "${!keys[@]}"; do
-        echo "  $((i + 1))) ${keys[$i]}  ${emails[$i]}"
+        if [[ "${keys[$i]}" == "$current_key" ]]; then
+            default_choice=$((i + 1))
+            echo "  $((i + 1))) ${keys[$i]}  ${emails[$i]}  (current)"
+        else
+            echo "  $((i + 1))) ${keys[$i]}  ${emails[$i]}"
+        fi
     done
     echo "  0) Skip"
 
     local choice
-    read -rp "Select key [1]: " choice
-    choice="${choice:-1}"
+    read -rp "Select key [$default_choice]: " choice
+    choice="${choice:-$default_choice}"
 
     if [[ "$choice" == "0" ]]; then
         info "Skipped GPG signing key"
@@ -76,6 +85,15 @@ configure_git() {
     git config --global commit.gpgsign "true"
     git config --global tag.gpgsign "true"
     git config --global init.defaultBranch "main"
+
+    # delta pager. side-by-side sits in a feature instead of the [delta] section
+    # so a pager can drop it with --features= (lazygit's panel is too narrow).
+    git config --global core.pager "delta"
+    git config --global interactive.diffFilter "delta --color-only"
+    git config --global delta.navigate "true"
+    git config --global delta.line-numbers "true"
+    git config --global delta.features "sbs"
+    git config --global delta.sbs.side-by-side "true"
 
     configure_gpg_key
 
