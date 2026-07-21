@@ -2,7 +2,7 @@
 
 set shell := ["bash", "-cu"]
 
-packages := "zsh vim tmux git ghostty gnupg claude lazygit"
+packages := "zsh vim tmux git ghostty gnupg claude lazygit herdr"
 
 # Show available commands
 default:
@@ -14,7 +14,7 @@ all: brew link plugins configure
 
 # Create symlinks using GNU Stow
 link:
-    @mkdir -p ~/.config/zsh ~/.config/ghostty ~/.config/lazygit ~/.gnupg ~/.claude
+    @mkdir -p ~/.config/zsh ~/.config/ghostty ~/.config/lazygit ~/.config/herdr ~/.gnupg ~/.claude
     @chmod 700 ~/.gnupg
     @for pkg in {{ packages }}; do stow -v --restow "$pkg"; done
     @sed -i '' "s|pinentry-program .*|pinentry-program $(brew --prefix)/bin/pinentry-mac|" gnupg/.gnupg/gpg-agent.conf

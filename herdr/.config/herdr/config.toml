@@ -1,0 +1,29 @@
+[keys]
+prefix = "ctrl+a"
+
+# prefix+alt+g -> lazygit in a modal popup
+[[keys.command]]
+key = "prefix+alt+g"
+type = "popup"
+command = "lazygit"
+width = "80%"
+height = "80%"
+
+[ui]
+agent_panel_sort = "priority"
+show_agent_labels_on_pane_borders = true
+
+[ui.toast]
+delivery = "off"
+
+# Resume Claude/Codex panes into their native sessions after a restart.
+# Relies on the per-agent integration hook (herdr integration install <agent>).
+[session]
+resume_agents_on_restore = true
+
+[experimental]
+pane_history = true
+switch_ascii_input_source_in_prefix = true
+# Show the cursor in agent panes while a CJK (Korean) IME is composing.
+reveal_hidden_cursor_for_cjk_ime = true
+cjk_ime_agents = ["claude"]
