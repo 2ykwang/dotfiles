@@ -1,3 +1,4 @@
+onboarding = false
 [keys]
 prefix = "ctrl+a"
 
@@ -27,3 +28,7 @@ switch_ascii_input_source_in_prefix = true
 # Show the cursor in agent panes while a CJK (Korean) IME is composing.
 reveal_hidden_cursor_for_cjk_ime = true
 cjk_ime_agents = ["claude"]
+
+[theme]
+name = "nord"
+auto_switch = false

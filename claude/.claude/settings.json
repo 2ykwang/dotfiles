@@ -4,11 +4,55 @@
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
-  "model": "opus[1m]",
-  "statusLine": {
-    "type": "command",
-    "command": "python3 ~/dotfiles/scripts/statusline.py"
+  "permissions": {
+    "ask": [
+      "Bash(gh issue create:*)",
+      "Bash(gh issue edit:*)",
+      "Bash(gh issue comment:*)",
+      "Bash(gh issue delete:*)",
+      "Bash(gh issue close:*)",
+      "Bash(gh issue reopen:*)",
+      "Bash(gh issue transfer:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(gh pr review:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(gh pr close:*)",
+      "Bash(gh pr ready:*)",
+      "Bash(gh release create:*)",
+      "Bash(gh release edit:*)",
+      "Bash(gh release delete:*)",
+      "Bash(gh repo create:*)",
+      "Bash(gh repo delete:*)",
+      "Bash(gh repo edit:*)",
+      "Bash(gh gist create:*)",
+      "Bash(git push:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "mcp__plugin_slack_slack__slack_send_message",
+      "mcp__plugin_slack_slack__slack_send_message_draft",
+      "mcp__plugin_slack_slack__slack_schedule_message",
+      "mcp__plugin_slack_slack__slack_create_canvas",
+      "mcp__plugin_slack_slack__slack_update_canvas",
+      "mcp__plugin_slack_slack__slack_create_conversation",
+      "mcp__plugin_slack_slack__slack_add_reaction",
+      "mcp__notion__notion-create-pages",
+      "mcp__notion__notion-update-page",
+      "mcp__notion__notion-create-comment",
+      "mcp__notion__notion-create-database",
+      "mcp__notion__notion-duplicate-page",
+      "mcp__notion__notion-move-pages",
+      "mcp__notion__notion-update-data-source",
+      "mcp__notion__notion-create-attachment",
+      "mcp__notion__notion-create-view",
+      "mcp__notion__notion-update-view",
+      "mcp__redash__update_dashboard",
+      "mcp__redash__share_dashboard",
+      "Artifact"
+    ]
   },
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -22,6 +66,10 @@
         ]
       }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "python3 ~/dotfiles/scripts/statusline.py"
   },
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
@@ -49,17 +97,18 @@
         "source": "github",
         "repo": "2ykwang/agent-skills"
       }
-    },
-    "ponytail": {
-      "source": {
-        "source": "github",
-        "repo": "DietrichGebert/ponytail"
-      }
     }
   },
   "language": "Korean",
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
+  "pluginConfigs": {
+    "grafana-mcp@claude-plugins-official": {
+      "options": {
+        "grafana_url": "https://riiid.grafana.net"
+      }
+    }
+  },
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
