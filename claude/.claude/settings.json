@@ -6,27 +6,43 @@
   },
   "permissions": {
     "ask": [
-      "Bash(gh issue create:*)",
-      "Bash(gh issue edit:*)",
-      "Bash(gh issue comment:*)",
-      "Bash(gh issue delete:*)",
-      "Bash(gh issue close:*)",
-      "Bash(gh issue reopen:*)",
-      "Bash(gh issue transfer:*)",
+      "Bash(gh pr comment:*)",
       "Bash(gh pr create:*)",
       "Bash(gh pr edit:*)",
-      "Bash(gh pr comment:*)",
       "Bash(gh pr review:*)",
       "Bash(gh pr merge:*)",
       "Bash(gh pr close:*)",
+      "Bash(gh pr reopen:*)",
       "Bash(gh pr ready:*)",
+      "Bash(gh issue comment:*)",
+      "Bash(gh issue create:*)",
+      "Bash(gh issue edit:*)",
+      "Bash(gh issue close:*)",
+      "Bash(gh issue reopen:*)",
+      "Bash(gh issue delete:*)",
+      "Bash(gh issue transfer:*)",
       "Bash(gh release create:*)",
       "Bash(gh release edit:*)",
       "Bash(gh release delete:*)",
-      "Bash(gh repo create:*)",
-      "Bash(gh repo delete:*)",
-      "Bash(gh repo edit:*)",
+      "Bash(gh release upload:*)",
       "Bash(gh gist create:*)",
+      "Bash(gh gist edit:*)",
+      "Bash(gh gist delete:*)",
+      "Bash(gh repo create:*)",
+      "Bash(gh repo edit:*)",
+      "Bash(gh repo delete:*)",
+      "Bash(gh repo fork:*)",
+      "Bash(gh repo rename:*)",
+      "Bash(gh workflow run:*)",
+      "Bash(gh run rerun:*)",
+      "Bash(gh run cancel:*)",
+      "mcp__*github*__create_*",
+      "mcp__*github*__add_*",
+      "mcp__*github*__update_*",
+      "mcp__*github*__delete_*",
+      "mcp__*github*__merge_*",
+      "mcp__*github*__push_*",
+      "mcp__*github*__*_write",
       "Bash(git push:*)",
       "Bash(curl:*)",
       "Bash(wget:*)",
@@ -86,16 +102,30 @@
     "skill-creator@claude-plugins-official": true,
     "check-agent-doc@2ykwang-agent-skills": true,
     "decision-board@2ykwang-agent-skills": true,
-    "ponytail@ponytail": true,
     "vercel@claude-plugins-official": true,
     "write-pr@2ykwang-agent-skills": true,
-    "quick-pr@2ykwang-agent-skills": true
+    "quick-pr@2ykwang-agent-skills": true,
+    "grafana-mcp@claude-plugins-official": true,
+    "fluent-korean@fluent-korean": true,
+    "codex@openai-codex": true
   },
   "extraKnownMarketplaces": {
     "2ykwang-agent-skills": {
       "source": {
         "source": "github",
         "repo": "2ykwang/agent-skills"
+      }
+    },
+    "fluent-korean": {
+      "source": {
+        "source": "github",
+        "repo": "snflkd/fluent-korean"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
       }
     }
   },
