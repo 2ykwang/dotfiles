@@ -25,7 +25,7 @@ After the first setup, `just all` runs every step at once.
 ## Layout
 
 Each top-level directory is a stow package mirroring `$HOME`:
-`zsh`, `vim`, `tmux`, `git`, `ghostty`, `gnupg`, `lazygit`, `claude`.
+`zsh`, `vim`, `tmux`, `git`, `ghostty`, `gnupg`, `lazygit`, `claude`, `herdr`, `zed`.
 
 - `claude/.claude/` — Claude Code global settings (`CLAUDE.md`, `settings.json`), linked into `~/.claude`
 - `zsh/.config/zsh/aliases-secret.zsh` — machine-local secrets, untracked; `.zshrc` sources it only when present
