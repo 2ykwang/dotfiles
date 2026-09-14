@@ -68,7 +68,7 @@
       "Artifact"
     ]
   },
-  "model": "claude-fable-5[1m]",
+  "model": "claude-fable-5-1[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -98,7 +98,6 @@
     "Notion@claude-plugins-official": true,
     "slack@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "notion@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
     "check-agent-doc@2ykwang-agent-skills": true,
     "decision-board@2ykwang-agent-skills": true,
@@ -107,7 +106,8 @@
     "quick-pr@2ykwang-agent-skills": true,
     "grafana-mcp@claude-plugins-official": true,
     "fluent-korean@fluent-korean": true,
-    "codex@openai-codex": true
+    "codex@openai-codex": true,
+    "abdiff@2ykwang": true
   },
   "extraKnownMarketplaces": {
     "2ykwang-agent-skills": {
@@ -127,11 +127,28 @@
         "source": "github",
         "repo": "openai/codex-plugin-cc"
       }
+    },
+    "2ykwang": {
+      "source": {
+        "source": "github",
+        "repo": "2ykwang/abdiff"
+      }
     }
   },
   "language": "Korean",
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
+  "modelSettings": {
+    "claude-fable-5": {
+      "effortLevel": "high"
+    },
+    "claude-fable-5-1": {
+      "effortLevel": "xhigh"
+    },
+    "claude-opus-5": {
+      "effortLevel": "xhigh"
+    }
+  },
   "pluginConfigs": {
     "grafana-mcp@claude-plugins-official": {
       "options": {
@@ -146,6 +163,7 @@
   "verbose": false,
   "autoCompactEnabled": false,
   "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754086736007
   }

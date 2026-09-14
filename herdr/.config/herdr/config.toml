@@ -30,5 +30,5 @@ reveal_hidden_cursor_for_cjk_ime = true
 cjk_ime_agents = ["claude"]
 
 [theme]
-name = "nord"
+name = "kanagawa"
 auto_switch = false
