@@ -67,8 +67,9 @@
   "agent_buffer_font_size": 17.0,
   "agent_ui_font_size": 17.0,
   "buffer_font_weight": 450.0,
-  "features": {
-    "edit_prediction_provider": "copilot"
+  "edit_predictions": {
+    "allow_data_collection": "no",
+    "provider": "zed"
   },
   "debugger": {
     "dock": "left"

@@ -23,5 +23,18 @@
     "bindings": {
       "cmd-shift-g": "git_panel::ToggleFocus"
     }
+  },
+  // Edit prediction: alt-a instead of alt-tab (request when none, accept when shown)
+  {
+    "context": "Editor && !edit_prediction",
+    "bindings": {
+      "alt-a": "editor::ShowEditPrediction"
+    }
+  },
+  {
+    "context": "Editor && edit_prediction",
+    "bindings": {
+      "alt-a": "editor::AcceptEditPrediction"
+    }
   }
 ]
