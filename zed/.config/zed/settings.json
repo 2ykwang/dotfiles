@@ -23,8 +23,35 @@
     }
   },
   "git": {
-    "diff_base": "head"
+    "diff_base": "head",
+    "inline_blame": {
+      "enabled": false
+    }
   },
+  "format_on_save": "on",
+  "use_smartcase_search": true,
+  "vertical_scroll_margin": 8,
+  // Replaces Zed's default list, so the defaults are repeated here before the additions.
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/.jj",
+    "**/.sl",
+    "**/.repo",
+    "**/CVS",
+    "**/.DS_Store",
+    "**/Thumbs.db",
+    "**/.classpath",
+    "**/.settings",
+    "**/node_modules",
+    "**/.venv",
+    "**/venv",
+    "**/__pycache__",
+    "**/.mypy_cache",
+    "**/.pytest_cache",
+    "**/.ruff_cache"
+  ],
   "proxy": "",
   "agent_servers": {
     "codex-acp": {
