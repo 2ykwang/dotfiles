@@ -2,7 +2,9 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 36500,
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "opus",
+    "CLAUDE_CODE_SUBAGENT_MODEL_FORCE": "1"
   },
   "permissions": {
     "ask": [
@@ -44,8 +46,6 @@
       "mcp__*github*__push_*",
       "mcp__*github*__*_write",
       "Bash(git push:*)",
-      "Bash(curl:*)",
-      "Bash(wget:*)",
       "mcp__plugin_slack_slack__slack_send_message",
       "mcp__plugin_slack_slack__slack_send_message_draft",
       "mcp__plugin_slack_slack__slack_schedule_message",
