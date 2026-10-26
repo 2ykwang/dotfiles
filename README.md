@@ -8,7 +8,7 @@ macOS dotfiles managed with GNU Stow and a Justfile.
 git clone https://github.com/2ykwang/dotfiles ~/dotfiles
 cd ~/dotfiles
 bash scripts/brew.sh   # Homebrew + Brewfile packages (installs stow, just)
-just link plugins configure
+just link plugins claude configure
 ```
 
 After the first setup, `just all` runs every step at once.
@@ -20,6 +20,7 @@ After the first setup, `just all` runs every step at once.
 | `just link` / `just unlink` | create/remove symlinks with stow |
 | `just brew` | install Homebrew and Brewfile packages |
 | `just plugins` | oh-my-zsh, zsh plugins, tmux (tpm) |
+| `just claude` | Claude Code via the official curl installer; skipped if already installed |
 | `just configure` | interactive git user / GPG signing setup |
 
 ## Layout

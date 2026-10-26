@@ -2,7 +2,6 @@
 # Brewfile - Homebrew packages
 # =====================================
 
-tap "derailed/k9s"
 tap "manaflow-ai/cmux"
 
 # CLI tools
@@ -49,10 +48,6 @@ brew "wimlib"               # Windows imaging (WIM) tool
 # AWS & Cloud
 brew "awscli"               # AWS CLI
 brew "gimme-aws-creds"      # AWS credentials helper
-
-# Kubernetes
-brew "kubectx"              # Kubernetes context/namespace switcher
-brew "derailed/k9s/k9s"     # Kubernetes TUI
 
 # Python
 brew "pipenv"               # Python virtualenv management

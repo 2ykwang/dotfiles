@@ -9,7 +9,7 @@ default:
     @just --list
 
 # Run all setup steps
-all: brew link plugins configure
+all: brew link plugins claude configure
     @echo "Setup complete! Restart your shell or run: exec zsh"
 
 # Create symlinks using GNU Stow
@@ -32,6 +32,10 @@ brew:
 # Install ZSH and Tmux plugins
 plugins:
     @bash scripts/plugins.sh
+
+# Install Claude Code via the native installer (skips if already installed)
+claude:
+    @bash scripts/claude.sh
 
 # Configure git user settings (interactive)
 configure:
