@@ -23,9 +23,9 @@
     },
   },
   "git": {
-    "diff_base": "head",
+    "diff_base": "default_branch",
     "inline_blame": {
-      "enabled": false,
+      "enabled": true,
     },
   },
   "format_on_save": "on",
@@ -89,6 +89,12 @@
     "dock": "left",
   },
   "agent": {
+    "default_model": {
+      "provider": "zed.dev",
+      "model": "claude-opus-5-5",
+      "enable_thinking": true,
+      "effort": "high",
+    },
     "message_editor_min_lines": 4,
     "dock": "right",
     "favorite_models": [],
@@ -99,7 +105,7 @@
   "buffer_font_weight": 450.0,
   "edit_predictions": {
     "allow_data_collection": "no",
-    "provider": "zed",
+    "provider": "copilot",
   },
   "debugger": {
     "dock": "left",
