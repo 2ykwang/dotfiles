@@ -18,3 +18,7 @@ command -v pyenv >/dev/null && eval "$(pyenv init -)"
 
 # libpq (PostgreSQL CLI)
 [[ -d "${HOMEBREW_PREFIX}/opt/libpq/bin" ]] && export PATH="${HOMEBREW_PREFIX}/opt/libpq/bin:$PATH"
+
+# Rust (Homebrew rustup is keg-only and ships cargo/rustc proxies; ~/.cargo/bin holds `cargo install` binaries)
+[[ -d "${HOMEBREW_PREFIX}/opt/rustup/bin" ]] && export PATH="${HOMEBREW_PREFIX}/opt/rustup/bin:$PATH"
+[[ -d "$HOME/.cargo/bin" ]] && export PATH="$HOME/.cargo/bin:$PATH"

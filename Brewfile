@@ -48,6 +48,7 @@ brew "wimlib"               # Windows imaging (WIM) tool
 # AWS & Cloud
 brew "awscli"               # AWS CLI
 brew "gimme-aws-creds"      # AWS credentials helper
+cask "session-manager-plugin" # AWS SSM Session Manager plugin (RDS tunnel, ECS Exec)
 
 # Python
 brew "pipenv"               # Python virtualenv management
@@ -55,6 +56,8 @@ brew "pyenv"                # Python version manager
 
 # Database
 brew "libpq"                # PostgreSQL client library
+brew "mongodb-atlas-cli"    # MongoDB Atlas CLI
+brew "mongosh"              # MongoDB Shell
 brew "mysql"                # MySQL database
 
 # Libraries
@@ -69,6 +72,7 @@ brew "go"                   # Go programming language
 brew "golangci-lint"        # Go linter
 brew "gopls"                # Go language server
 brew "mac-cleanup-go"       # macOS cleanup utility
+brew "rustup"               # Rust toolchain installer
 cask "cmux"                 # Terminal multiplexer for coding agents
 cask "cursor"               # AI code editor
 cask "cursor-cli"           # Cursor CLI
@@ -78,6 +82,7 @@ cask "github"               # GitHub Desktop
 cask "httpie-desktop"       # HTTPie desktop app
 cask "mitmproxy"            # HTTP proxy tool
 cask "ngrok"                # Secure tunneling
+cask "sentry-cli"           # Sentry CLI
 cask "visual-studio-code"   # Code editor
 
 # Productivity
