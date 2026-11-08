@@ -26,9 +26,10 @@ After the first setup, `just all` runs every step at once.
 ## Layout
 
 Each top-level directory is a stow package mirroring `$HOME`:
-`zsh`, `vim`, `tmux`, `git`, `ghostty`, `gnupg`, `lazygit`, `claude`, `herdr`, `zed`.
+`zsh`, `vim`, `tmux`, `git`, `ghostty`, `gnupg`, `lazygit`, `claude`, `codex`, `herdr`, `zed`.
 
 - `claude/.claude/` — Claude Code global settings (`CLAUDE.md`, `settings.json`), linked into `~/.claude`
+- `codex/.codex/AGENTS.md` is a relative symlink to `claude/.claude/CLAUDE.md`, so Claude and Codex share one global instruction file. Shared coding rules live in `agent-guides/code.md`; `agent-guides/AGENTS.md` routes coding tasks to them.
 - `zsh/.config/zsh/aliases-secret.zsh` — machine-local secrets, untracked; `.zshrc` sources it only when present
 - `.claude/skills/brew-update/` — project skill; run `/brew-update` in this repo to sync the Brewfile with installed packages
 
