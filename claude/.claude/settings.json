@@ -79,7 +79,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/youngkwang/.claude/hooks/herdr-agent-state.sh' session",
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session",
             "timeout": 10
           }
         ]
@@ -88,7 +88,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "python3 ~/dotfiles/scripts/statusline.py"
+    "command": "python3 -c 'import runpy; from pathlib import Path; runpy.run_path(str(Path.home().joinpath(\".claude/settings.json\").resolve().parents[2] / \"scripts/statusline.py\"), run_name=\"__main__\")'"
   },
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
