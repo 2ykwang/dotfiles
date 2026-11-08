@@ -14,8 +14,10 @@ height = "80%"
 agent_panel_sort = "priority"
 show_agent_labels_on_pane_borders = true
 
+status_indicators = "symbols"
+
 [ui.toast]
-delivery = "off"
+delivery = "herdr"
 
 # Resume Claude/Codex panes into their native sessions after a restart.
 # Relies on the per-agent integration hook (herdr integration install <agent>).
@@ -30,5 +32,5 @@ reveal_hidden_cursor_for_cjk_ime = true
 cjk_ime_agents = ["claude"]
 
 [theme]
-name = "kanagawa"
+name = "one-dark"
 auto_switch = false
