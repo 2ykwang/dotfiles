@@ -10,6 +10,13 @@ command = "lazygit"
 width = "80%"
 height = "80%"
 
+# The per-user launcher keeps project locations out of shared configuration.
+[[keys.command]]
+key = "prefix+shift+f"
+type = "plugin_action"
+command = "herdr-finder.open"
+description = "Find a running session"
+
 [ui]
 agent_panel_sort = "priority"
 show_agent_labels_on_pane_borders = true
@@ -36,7 +43,7 @@ rows = [
 ]
 
 [ui.toast]
-delivery = "herdr"
+delivery = "system"
 
 # Resume Claude/Codex panes into their native sessions after a restart.
 # Relies on the per-agent integration hook (herdr integration install <agent>).
@@ -51,5 +58,5 @@ reveal_hidden_cursor_for_cjk_ime = true
 cjk_ime_agents = ["claude"]
 
 [theme]
-name = "one-dark"
+name = "nord"
 auto_switch = false
