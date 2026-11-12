@@ -1,5 +1,5 @@
 #!/bin/bash
-# Install ZSH and Tmux plugins
+# Install ZSH, Tmux and Herdr plugins
 
 set -e
 
@@ -75,6 +75,40 @@ install_tmux_plugins() {
     ok "Tmux plugins installed"
 }
 
+herdr_plugin_registered() {
+    herdr plugin list --plugin "$1" --json 2>/dev/null | grep -q "\"plugin_id\":\"$1\""
+}
+
+# Herdr keeps its plugin registry in ~/.config/herdr/plugins.json, which stow
+# does not manage, so config.toml can reference plugins that were never
+# registered on this machine.
+install_herdr_plugins() {
+    if ! command -v herdr &>/dev/null; then
+        warn "herdr not found, skipping Herdr plugins"
+        return
+    fi
+
+    # `herdr plugin install` replaces an existing registration, including one
+    # linked from a local checkout, so only install when the id is missing.
+    if herdr_plugin_registered herdr-finder; then
+        ok "herdr-finder already registered"
+    elif herdr plugin install 2ykwang/herdr-finder --yes >/dev/null; then
+        ok "herdr-finder installed"
+    else
+        warn "Failed to install herdr-finder"
+    fi
+
+    local sidebar_dir
+    sidebar_dir="$(get_base_dir)/herdr/.config/herdr/local-plugins/sidebar-activity"
+    if herdr_plugin_registered sidebar-activity; then
+        ok "sidebar-activity already registered"
+    elif herdr plugin link "$sidebar_dir" >/dev/null; then
+        ok "sidebar-activity linked"
+    else
+        warn "Failed to link sidebar-activity"
+    fi
+}
+
 main() {
     info "Setting up ZSH plugins..."
     install_omz
@@ -83,6 +117,9 @@ main() {
     info "Setting up Tmux plugins..."
     install_tpm
     install_tmux_plugins
+
+    info "Setting up Herdr plugins..."
+    install_herdr_plugins
 }
 
 main

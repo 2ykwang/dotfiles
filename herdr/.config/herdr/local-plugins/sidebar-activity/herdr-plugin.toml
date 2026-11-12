@@ -1,0 +1,22 @@
+id = "sidebar-activity"
+name = "Sidebar Activity"
+version = "1.0.0"
+min_herdr_version = "0.9.5"
+description = "Show verified conversation times in the personal agent sidebar"
+platforms = ["macos", "linux"]
+
+[[startup]]
+command = ["python3", "sync.py"]
+
+[[events]]
+on = "pane.agent_detected"
+command = ["python3", "sync.py"]
+
+[[events]]
+on = "pane.agent_status_changed"
+command = ["python3", "sync.py"]
+
+[[actions]]
+id = "sync"
+title = "Refresh sidebar conversation times"
+command = ["python3", "sync.py"]

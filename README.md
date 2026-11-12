@@ -22,7 +22,7 @@ After the first setup, `just all` runs every step at once.
 | --------------------------- | ------------------------------------------------------------------------- |
 | `just link` / `just unlink` | create/remove symlinks with stow                                          |
 | `just brew`                 | install Homebrew and Brewfile packages                                    |
-| `just plugins`              | oh-my-zsh, zsh plugins, tmux (tpm)                                        |
+| `just plugins`              | oh-my-zsh, zsh plugins, tmux (tpm), Herdr plugins                         |
 | `just claude`               | Claude Code via the official curl installer; skipped if already installed |
 | `just hooks`                | install the pre-commit git hook, once per clone (gitleaks, shellcheck)    |
 | `just configure`            | interactive git user / GPG signing setup                                  |

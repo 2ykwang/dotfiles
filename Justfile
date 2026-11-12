@@ -29,7 +29,7 @@ unlink:
 brew:
     @bash scripts/brew.sh
 
-# Install ZSH and Tmux plugins
+# Install ZSH, Tmux and Herdr plugins
 plugins:
     @bash scripts/plugins.sh
 

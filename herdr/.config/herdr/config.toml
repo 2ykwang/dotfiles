@@ -16,6 +16,25 @@ show_agent_labels_on_pane_borders = true
 
 status_indicators = "symbols"
 
+[ui.sidebar.agents]
+row_gap = 0
+rows = [
+    [
+        "state_icon",
+        { token = "workspace", bold = true, dim = false },
+    ],
+    [
+        { token = "tab", fg = "#ABB2BF", bold = true, dim = false },
+        # Manual pane name. Empty for unnamed panes, so only named panes
+        # (for example ones an agent opened and marked) show it.
+        { token = "pane", fg = "#EBCB8B", bold = true, dim = false },
+        { token = "agent", fg = "#ABB2BF", bold = true, dim = false },
+    ],
+    [
+        { token = "$sidebar_last_active", fg = "#808080", bold = false, dim = false },
+    ],
+]
+
 [ui.toast]
 delivery = "herdr"
 
