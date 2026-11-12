@@ -9,6 +9,7 @@ brew "bat"                  # Cat with syntax highlighting
 brew "eza"                  # Modern ls replacement
 brew "btop"                 # Resource monitor
 brew "blueutil"             # Bluetooth CLI
+brew "broot"                # Directory tree navigator
 brew "cowsay"               # ASCII art message generator
 brew "claude-squad"         # Multi-agent session manager
 brew "direnv"               # Per-directory environment loader

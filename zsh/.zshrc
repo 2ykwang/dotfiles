@@ -23,3 +23,7 @@ if command -v fortune &>/dev/null && command -v cowsay &>/dev/null; then
 fi
 
 eval "$(direnv hook zsh)"
+
+# broot's `br` shell function. `broot --install` generates the launcher file,
+# so it is missing until that has run once on this machine.
+[[ -f "$HOME/.config/broot/launcher/bash/br" ]] && source "$HOME/.config/broot/launcher/bash/br"
