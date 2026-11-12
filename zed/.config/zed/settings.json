@@ -61,7 +61,7 @@
       "default_config_options": {
         "agent": "codex:codex-rescue",
         "fast": true,
-        "model": "opus[1m]",
+        "model": "opus",
         "mode": "default",
       },
       "type": "registry",
