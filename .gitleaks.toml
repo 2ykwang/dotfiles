@@ -1,0 +1,9 @@
+# Without this, a custom config replaces gitleaks' built-in rules instead of
+# adding to them.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "absolute-home-path"
+description = "Absolute home path leaks the local username. Use $HOME or ~."
+regex = '''/Users/[A-Za-z0-9._-]+/'''

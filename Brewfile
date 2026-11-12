@@ -21,6 +21,7 @@ brew "gh"                   # GitHub CLI
 brew "git"                  # Version control
 brew "herdr"                # Terminal agent multiplexer
 brew "git-lfs"              # Git large file storage
+brew "gitleaks"             # Secret scanner (used by pre-commit hook)
 brew "gnupg"                # GPG encryption
 brew "httpie"               # HTTP client
 brew "hurl"                 # HTTP request runner
@@ -36,6 +37,7 @@ brew "pcp"                  # System performance toolkit
 brew "pinentry"             # GPG pin entry (terminal)
 brew "pinentry-mac"         # GPG pin entry (macOS GUI/IDE)
 brew "pipx"                 # Python app installer
+brew "pre-commit"           # Git hook runner (.pre-commit-config.yaml)
 brew "ripgrep"              # Fast recursive search
 brew "shellcheck"           # Shell script linter
 brew "stow"                 # Symlink farm manager

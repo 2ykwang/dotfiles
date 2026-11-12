@@ -21,3 +21,13 @@ repos:
         language: system
         types: [shell]
         files: \.(sh|zsh)$
+
+  # Uses the Brewfile's gitleaks binary. It picks up .gitleaks.toml from the
+  # repo root and reads the staged diff itself, so it takes no filenames.
+  - repo: local
+    hooks:
+      - id: gitleaks
+        name: gitleaks
+        entry: gitleaks git --pre-commit --staged --redact --verbose --no-banner
+        language: system
+        pass_filenames: false

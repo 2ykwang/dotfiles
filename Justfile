@@ -9,7 +9,7 @@ default:
     @just --list
 
 # Run all setup steps
-all: brew link plugins claude configure
+all: brew link plugins claude hooks configure
     @echo "Setup complete! Restart your shell or run: exec zsh"
 
 # Create symlinks using GNU Stow
@@ -36,6 +36,10 @@ plugins:
 # Install Claude Code via the native installer (skips if already installed)
 claude:
     @bash scripts/claude.sh
+
+# Install the pre-commit git hook into .git/hooks (once per clone)
+hooks:
+    @pre-commit install
 
 # Configure git user settings (interactive)
 configure:
