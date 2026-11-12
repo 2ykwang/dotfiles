@@ -52,6 +52,68 @@ class ConversationTimesTests(unittest.TestCase):
             self.assertEqual(reader.jsonl(path, "claude", "selected"),
                              sync.timestamp("2026-11-09T00:00:00Z"))
 
+    def test_claude_tool_traffic_and_reasoning_do_not_advance_date(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "session.jsonl"
+            events = [
+                {"type": "user", "message": {"role": "user", "content": "question"},
+                 "timestamp": "2026-11-09T00:00:00Z"},
+                {"type": "assistant", "message": {"role": "assistant", "content": [{"type": "text"}]},
+                 "timestamp": "2026-11-09T01:00:00Z"},
+                {"type": "assistant", "message": {"role": "assistant", "content": [{"type": "tool_use"}]},
+                 "timestamp": "2026-11-09T02:00:00Z"},
+                {"type": "user", "message": {"role": "user", "content": [{"type": "tool_result"}]},
+                 "timestamp": "2026-11-09T03:00:00Z"},
+                {"type": "assistant", "message": {"role": "assistant", "content": [{"type": "thinking"}]},
+                 "timestamp": "2026-11-09T04:00:00Z"},
+            ]
+            path.write_text('\n'.join(json.dumps(event) for event in events))
+            reader = sync.ConversationTimes()
+            self.assertEqual(reader.jsonl(path, "claude", None),
+                             sync.timestamp("2026-11-09T01:00:00Z"))
+
+    def test_lookup_cut_short_is_unavailable_rather_than_empty(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            database = Path(temporary) / "thread_history_1.sqlite"
+            with sqlite3.connect(str(database)) as connection:
+                connection.execute("CREATE TABLE thread_items(thread_id, item_type, created_at_ms)")
+            reference = {"agent": "codex", "kind": "id", "value": "selected"}
+
+            out_of_time = sync.ConversationTimes()
+            out_of_time.codex = Path(temporary)
+            out_of_time.deadline = 0
+            self.assertIs(out_of_time.read(reference), sync.UNAVAILABLE)
+
+            transcript = Path(temporary) / "session.jsonl"
+            transcript.write_text('{}\n')
+            self.assertIs(out_of_time.jsonl(transcript, "claude", None), sync.UNAVAILABLE)
+
+            locked = sync.ConversationTimes()
+            locked.codex = Path(temporary)
+            writer = sqlite3.connect(str(database), isolation_level=None)
+            try:
+                writer.execute("BEGIN EXCLUSIVE")
+                self.assertIs(locked.read(reference), sync.UNAVAILABLE)
+            finally:
+                writer.close()
+
+            # An older database version without the table is "no conversation", not a failure.
+            with sqlite3.connect(str(database)) as connection:
+                connection.execute("DROP TABLE thread_items")
+            older = sync.ConversationTimes()
+            older.codex = Path(temporary)
+            self.assertIsNone(older.read(reference))
+
+    def test_sync_keeps_the_shown_date_when_the_lookup_is_unavailable(self):
+        agent = {"terminal_id": "term1", "pane_id": "w1:p1", "agent": "codex",
+                 "agent_session": {"agent": "codex", "kind": "id", "value": "selected"},
+                 "tokens": {sync.TOKEN: "old date"}}
+        with patch.object(sync, "agents", return_value={"term1": agent}), \
+                patch.object(sync.ConversationTimes, "read", return_value=sync.UNAVAILABLE), \
+                patch.object(sync, "rpc") as rpc:
+            sync.sync()
+        rpc.assert_not_called()
+
     def test_sync_clears_unknown_dates_and_skips_replaced_agents(self):
         unknown = {"terminal_id": "term1", "pane_id": "w1:p1", "agent": "codex",
                    "tokens": {sync.TOKEN: "old date", "keep": "untouched"}}

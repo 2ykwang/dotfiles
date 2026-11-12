@@ -13,6 +13,11 @@ import time
 
 TOKEN = "sidebar_last_active"
 MAX_BYTES = 1024 * 1024
+# A lookup that could not finish: the time budget ran out or a database was
+# locked. None means something else, that the conversation has no verifiable time.
+UNAVAILABLE = object()
+# Claude content blocks that are not conversation: tool traffic and reasoning.
+SILENT_BLOCKS = {"tool_use", "tool_result", "thinking", "redacted_thinking"}
 
 
 def rpc(method, params):
@@ -46,8 +51,17 @@ def agents():
 
 def identity(agent):
     reference = agent.get("agent_session") or {}
-    return (agent["terminal_id"], agent["agent"], reference.get("agent"),
+    return (agent["terminal_id"], agent.get("agent"), reference.get("agent"),
             reference.get("kind"), reference.get("value"))
+
+
+def spoken(message):
+    """False when every content block of a Claude message is tool traffic or reasoning."""
+    content = message.get("content")
+    if not isinstance(content, list) or not content:
+        return True
+    return any(not isinstance(block, dict) or block.get("type") not in SILENT_BLOCKS
+               for block in content)
 
 
 def timestamp(value):
@@ -74,9 +88,11 @@ class ConversationTimes:
 
     def query(self, path, sql, session_id):
         if time.monotonic() >= self.deadline:
-            return None
+            return UNAVAILABLE
         try:
-            connection = sqlite3.connect(path.as_uri() + "?mode=ro", timeout=0.05)
+            # Without uri=True the "file:...?mode=ro" string is only read as a URI
+            # on SQLite builds compiled with URI filenames enabled.
+            connection = sqlite3.connect(path.as_uri() + "?mode=ro", timeout=0.05, uri=True)
             try:
                 connection.set_progress_handler(
                     lambda: time.monotonic() >= self.deadline, 1000)
@@ -84,7 +100,11 @@ class ConversationTimes:
                 return row[0] if row else None
             finally:
                 connection.close()
-        except sqlite3.Error:
+        except sqlite3.Error as error:
+            # An older database version without the table is a normal "no data" answer.
+            # Only a lock or an exhausted time budget leaves the answer unknown.
+            if time.monotonic() >= self.deadline or "locked" in str(error):
+                return UNAVAILABLE
             return None
 
     def jsonl(self, path, provider, session_id):
@@ -100,7 +120,7 @@ class ConversationTimes:
         latest = None
         for line in reversed(lines):
             if time.monotonic() >= self.deadline:
-                return None
+                return UNAVAILABLE
             if len(line) > 262144:
                 continue
             try:
@@ -108,10 +128,12 @@ class ConversationTimes:
                 kind = event.get("type")
                 payload = event.get("payload") or {}
                 if provider == "claude":
+                    message = event.get("message") or {}
                     relevant = (kind in ("user", "assistant")
-                                and (event.get("message") or {}).get("role") == kind
+                                and message.get("role") == kind
                                 and not event.get("isMeta")
-                                and (not session_id or event.get("sessionId", session_id) == session_id))
+                                and (not session_id or event.get("sessionId", session_id) == session_id)
+                                and spoken(message))
                 else:
                     relevant = ((kind == "response_item" and payload.get("type") == "message"
                                  and payload.get("role") in ("user", "assistant"))
@@ -141,6 +163,8 @@ class ConversationTimes:
         for path in self.databases("thread_history"):
             millis = self.query(path, "SELECT MAX(created_at_ms) FROM thread_items "
                                 "WHERE thread_id=? AND item_type IN ('userMessage','agentMessage')", value)
+            if millis is UNAVAILABLE:
+                return UNAVAILABLE
             if isinstance(millis, (int, float)):
                 try:
                     at = dt.datetime.fromtimestamp(millis / 1000, dt.timezone.utc)
@@ -151,6 +175,8 @@ class ConversationTimes:
             return latest
         for path in self.databases("state"):
             rollout = self.query(path, "SELECT rollout_path FROM threads WHERE id=? LIMIT 1", value)
+            if rollout is UNAVAILABLE:
+                return UNAVAILABLE
             if isinstance(rollout, str) and Path(rollout).is_absolute():
                 return self.jsonl(Path(rollout), provider, value)
         return None
@@ -165,28 +191,43 @@ def sync():
         if key not in resolved:
             resolved[key] = reader.read(agent.get("agent_session")) if key[0] == key[1] else None
         at = resolved[key]
+        if at is UNAVAILABLE:
+            # Leave the shown value alone. Clearing it would make a verified time
+            # disappear and come back whenever a lookup is cut short.
+            continue
         dates[terminal] = at.astimezone().strftime("%Y-%m-%d %H:%M") if at else None
     # Panes can move or start another agent while their conversation files are read.
     for terminal, current in agents().items():
         old = before.get(terminal)
-        if old is None or identity(old) != identity(current):
+        if terminal not in dates or old is None or identity(old) != identity(current):
             continue
         value = dates[terminal]
         if current.get("tokens", {}).get(TOKEN) != value:
-            rpc("pane.report_metadata", {"pane_id": current["pane_id"],
-                                        "source": "plugin:" + os.environ["HERDR_PLUGIN_ID"],
-                                        "tokens": {TOKEN: value}})
+            try:
+                rpc("pane.report_metadata", {"pane_id": current["pane_id"],
+                                            "source": "plugin:" + os.environ["HERDR_PLUGIN_ID"],
+                                            "tokens": {TOKEN: value}})
+            except RuntimeError:
+                # The pane can close between the snapshot and this call. The
+                # remaining panes still need their update.
+                continue
 
 
 def main():
     state = Path(os.environ["HERDR_PLUGIN_STATE_DIR"])
     state.mkdir(parents=True, exist_ok=True)
     session = hashlib.sha256(os.environ["HERDR_SOCKET_PATH"].encode()).hexdigest()[:16]
+    # Each event leaves a request flag and then waits for the lock. A sync that
+    # starts after the flag was set already covers that event, so the waiter
+    # skips. Exiting without waiting would drop events that arrive after a
+    # running sync has taken its snapshot.
+    pending = state / (session + ".pending")
+    pending.touch()
     with (state / (session + ".lock")).open("a") as lock:
-        try:
-            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        if not pending.exists():
             return
+        pending.unlink()
         sync()
 
 
