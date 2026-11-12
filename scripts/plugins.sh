@@ -76,7 +76,10 @@ install_tmux_plugins() {
 }
 
 herdr_plugin_registered() {
-    herdr plugin list --plugin "$1" --json 2>/dev/null | grep -q "\"plugin_id\":\"$1\""
+    # Tolerates whitespace around the colon. A miss here is treated as
+    # "not registered" and leads to an install that replaces a linked plugin.
+    herdr plugin list --plugin "$1" --json 2>/dev/null \
+        | grep -Eq "\"plugin_id\"[[:space:]]*:[[:space:]]*\"$1\""
 }
 
 # Herdr keeps its plugin registry in ~/.config/herdr/plugins.json, which stow

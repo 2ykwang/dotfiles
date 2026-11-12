@@ -26,4 +26,8 @@ eval "$(direnv hook zsh)"
 
 # broot's `br` shell function. `broot --install` generates the launcher file,
 # so it is missing until that has run once on this machine.
-[[ -f "$HOME/.config/broot/launcher/bash/br" ]] && source "$HOME/.config/broot/launcher/bash/br"
+# An `if` keeps the exit status 0 when the file is missing. As the last line of
+# this file, `[[ -f ... ]] && source ...` would leave status 1 for the first prompt.
+if [[ -f "$HOME/.config/broot/launcher/bash/br" ]]; then
+    source "$HOME/.config/broot/launcher/bash/br"
+fi

@@ -10,7 +10,8 @@ command = "lazygit"
 width = "80%"
 height = "80%"
 
-# The per-user launcher keeps project locations out of shared configuration.
+# prefix+shift+f -> open the herdr-finder plugin (its "open" action).
+# The plugin must be registered on this machine first: run `just plugins`.
 [[keys.command]]
 key = "prefix+shift+f"
 type = "plugin_action"

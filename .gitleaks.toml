@@ -6,4 +6,4 @@ useDefault = true
 [[rules]]
 id = "absolute-home-path"
 description = "Absolute home path leaks the local username. Use $HOME or ~."
-regex = '''/Users/[A-Za-z0-9._-]+/'''
+regex = '''/(Users|home)/[A-Za-z0-9._-]+'''
