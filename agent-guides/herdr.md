@@ -1,60 +1,113 @@
-# Herdr 기능 선택과 실행
+# Herdr
 
-사용자가 Herdr 사용을 요청한 범위에서 필요한 기능을 조합한다. **작업의 목적, 조작 대상, 완료 조건을 먼저 정하고 기능을 선택한다.** 특정 화면 배치나 에이전트 제품을 기본 해법으로 고정하지 않는다.
+사용자가 Herdr 사용을 요청한 범위에서만 쓴다. 구문의 정본은 설치된 CLI다. 여기에 없는 것은 `herdr pane` 같은 그룹 도움말과 `herdr --skill`로 확인한다. `herdr` 단독은 TUI를 띄우고 `herdr workspace create` 같은 변경 명령은 인자 없이도 실행되므로 탐색용으로 쓰지 않는다.
 
-명령 구문은 설치된 CLI, 조작 지침은 `herdr --skill`을 정본으로 사용한다. 아래 기능 지도는 CLI 명령 그룹과 socket schema를 바탕으로 한다. [CLI 문서](https://herdr.dev/tui/docs/cli-reference/), [Socket API 문서](https://herdr.dev/tui/docs/socket-api/)
+## 시작 전 확인
 
-## 기능 지도
+1. `test "${HERDR_ENV:-}" = 1`이 실패하면 중단하고 알린다.
+2. `herdr pane current --current`의 작업 경로와 화면 내용이 현재 대화와 맞는지 확인한다. 공유 Codex 데몬은 다른 세션의 환경변수를 물려받을 수 있다.
+3. 맞지 않거나 `pane_not_found`면 아무것도 바꾸지 않는다. `herdr session list --json`의 세션마다 `agent list`와 `pane read`로 현재 대화가 있는 pane을 찾는다. 못 찾으면 사용자에게 묻는다.
+4. 세션을 확인한 뒤에는 모든 로컬 명령에 `herdr --session "$session"`을 붙인다. 2번에서 맞았다면 세션 이름은 `herdr session list --json`에서 `socket_path`가 `$HERDR_SOCKET_PATH`인 항목이고, 3번에서 찾았다면 그 pane을 찾은 세션이다. 하위 에이전트에게도 세션명과 확인한 ID를 넘긴다.
 
-| 필요한 능력                        | 기능                                                                 | 선택 기준                                                         |
-| ---------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| 실행 중인 작업의 전체 상태 파악    | `status`, `api snapshot`, 각 대상의 `list`, `get`                    | 전체 구조가 필요하면 snapshot, 대상이 정해졌으면 해당 대상만 조회 |
-| 프로젝트나 작업 맥락 묶기          | `workspace` 생성, 이름, 조회, 전환, 종료                             | 여러 탭을 하나의 작업 단위로 관리할 때. Git checkout 분리는 별도  |
-| 한 작업 안에서 화면 나누기         | `tab` 생성과 관리, `pane split`                                      | 동시에 볼 것은 패널, 다른 화면으로 묶을 것은 탭                   |
-| 실행 중인 터미널 재배치            | `pane layout`, `neighbor`, `edges`, `resize`, `swap`, `move`, `zoom` | 프로세스를 유지하며 위치나 크기를 바꿀 때                         |
-| 일반 명령과 대화형 프로그램 제어   | `pane run`, `send-text`, `send-keys`, `read`, `process-info`         | 셸, 테스트, 서버, 편집기 등 터미널 자체가 대상일 때               |
-| AI에게 작업 전달과 결과 수집       | `agent` 조회, 시작, 이름, 프롬프트, 대기, 읽기, 진단                 | 에이전트 정체성과 작업 상태를 확인하면서 조작할 때                |
-| 조건에 맞춰 후속 작업 시작         | `pane wait-output`, `agent wait`, `events`                           | 로그 조건, 에이전트 상태, 구조 변경 중 무엇을 기다리는지 구분     |
-| Git 브랜치별 파일 공간 분리        | `worktree list`, `create`, `open`, `remove`                          | 서로 다른 checkout이 필요할 때. 탭이나 패널 생성과 구분           |
-| 터미널에 직접 접속하거나 세션 관리 | `terminal attach`, `terminal session`, `agent attach`, `session`     | 출력 조회를 넘어 직접 관찰하거나 입력 제어, 재접속할 때           |
-| SSH 머신의 작업 제어               | `machine`, `--machine`, `--remote`                                   | 등록된 머신에 명령을 전달할지, 원격 화면에 접속할지 선택          |
-| 완료나 사용자 개입 알리기          | `notification show`                                                  | 계속 화면을 확인하는 대신 의미 있는 상태 변화를 알릴 때           |
-| 에이전트 세션 연동                 | `integration status`, `install`, `uninstall`                         | 세션 식별과 복원 연동을 조사하거나 설정할 때                      |
-| 반복 작업을 기능으로 확장          | `plugin`의 action, event hook, pane, link handler                    | 여러 단계의 도구나 사용자용 동작으로 재사용할 때                  |
-| 사용자화된 자동화와 상태 표시      | socket API의 layout, events, metadata, agent view                    | CLI에 없는 조작, 구독, 사용자화된 정렬과 필터가 필요할 때         |
-| 동작과 키, 화면 설정 조정          | `config check`, 기본 설정 출력, config reload                        | 요청한 설정 변경을 검증하고 반영할 때                             |
+## 기본값
 
-## 기능을 조합하는 기준
+- 기존 pane이나 에이전트로 되면 새로 만들지 않는다.
+- 배치 지정이 없으면 현재 탭의 형제 pane, 현재 작업 경로에 만든다. tab, workspace, worktree는 요청받았을 때만 만든다.
+- 항상 `--no-focus`를 붙인다. 사용자가 전환을 요청한 경우만 예외다.
+- 넓은 pane은 `right`, 좁거나 긴 pane은 `down`으로 나눈다. 크기는 `herdr pane layout --pane "$pane"`로 확인한다.
+- 새 tab과 workspace에는 root pane이 이미 있다. 그것부터 쓴다.
+- **직접 만든 pane, tab, workspace의 이름은 `↳ `로 시작한다.** 사용자가 에이전트가 연 대상을 구분하는 표식이다.
+- 직접 만들지 않은 대상은 이름을 바꾸거나 닫지 않는다.
+- 대상은 ID, `--current`, 에이전트 이름으로 지정한다. UI 포커스에 의존하지 않는다.
+- ID는 응답 JSON에서 읽는다. pane을 다른 workspace로 옮기면 ID가 바뀌므로 이동 응답의 새 ID를 쓴다.
 
-1. **대상과 제어 수단을 구분한다.** 패널은 터미널 위치이고 에이전트는 그 안의 프로세스다. `agent start`는 배치를 만들지 않는다. 일반 프로세스는 pane, AI 작업은 agent 표면으로 제어한다.
-2. **필요한 분리 수준을 선택한다.** 화면 분리는 pane과 tab, 작업 묶음은 workspace, Git 파일 분리는 worktree, 실행 서버 분리는 session이다. worktree도 포트, DB, 비밀정보를 자동 격리하지 않는다. 프로젝트의 작업 위치와 환경 준비 지침을 따른다.
-3. **역할과 제품을 분리한다.** 검토, 구현, 조사 같은 역할에 Copilot, Claude, Codex를 고정 배정하지 않는다. 사용자가 요청한 종류와 기존 작업 맥락으로 결정한다. 여러 에이전트를 실행할 수 있다는 이유만으로 같은 파일 편집을 병렬화하지 않는다.
-4. **의존 관계에 맞춰 실행한다.** 독립적인 검토와 명령은 병렬 실행할 수 있다. 서버 준비 뒤 테스트, 결과 수집 뒤 검토처럼 선행 조건이 있으면 해당 출력이나 상태를 기다린다.
-5. **완료 근거를 정한다.** 명령 수락, 에이전트 대기 상태, 실제 작업 성공을 구분한다. 목적에 맞는 출력, 종료 코드, 테스트 결과나 산출물을 확인한다.
+## 만들기
 
-기존 작업을 이어 쓸지 새 대상을 만들지도 먼저 결정한다. 새 에이전트가 필요하고 배치 요청이 없다면 현재 탭의 형제 패널과 현재 작업 경로를 기본으로 한다. 별도 workspace, tab, worktree는 요청한 범위에서 만든다. 사용자 전환 요청이 없으면 `--no-focus`를 사용한다. [내장 스킬 안내](https://herdr.dev/tui/docs/agent-skill/)
+```sh
+herdr pane split "$pane" --direction right --cwd "$PWD" --no-focus            # .result.pane.pane_id
+herdr pane rename "$new_pane" "↳ 용도"                                         # split 직후
+herdr tab create --workspace "$ws" --cwd "$PWD" --label "↳ 용도" --no-focus    # .result.root_pane.pane_id
+herdr workspace create --cwd "$PWD" --label "↳ 용도" --no-focus                # .result.root_pane.pane_id
+```
 
-## 진입과 기능 탐색
+| 필요                    | 수단                                           |
+| ----------------------- | ---------------------------------------------- |
+| 화면 나누기             | pane, tab                                      |
+| 작업 묶음               | workspace                                      |
+| Git checkout 분리       | worktree. 포트, DB, 비밀정보는 분리되지 않는다 |
+| 실행 서버 분리          | session                                        |
+| 실행 중인 터미널 재배치 | `pane move`, `swap`, `resize`, `zoom`          |
 
-1. 조작 전에 `test "${HERDR_ENV:-}" = 1`을 확인한다. 실패하면 Herdr 안에서 실행 중이 아님을 알리고 조작을 중단한다. **이 검사만으로 현재 대화가 속한 세션을 확인한 것은 아니다.** 공유 Codex 데몬에서 실행한 명령은 현재 화면과 다른 세션의 `HERDR_SOCKET_PATH`, pane ID를 물려받을 수 있다.
-2. 현재 컨텍스트에 내장 스킬이 없으면 `herdr --skill`을 읽는다. 최초 접근이나 버전 의심 시 `herdr --version`, `herdr status`로 CLI와 서버를 확인한다.
-3. **새 workspace 생성 등 모든 변경 명령 전에 대상 세션을 검증한다.** 사용자가 지정한 세션이나 이미 검증한 작업 대상이 있으면 그 세션을 사용한다. 지정하지 않았다면 `herdr pane current --current`와 현재 패널의 작업 경로, 대화 내용을 대조해 현재 대화의 세션을 확인한다. `pane_not_found`나 불일치가 나오면 변경을 멈추고 `herdr session list --json`으로 실행 중인 세션을 찾는다. 각 후보를 명시적으로 조회해 현재 대화가 있는 패널을 확인한다. 확인할 수 없으면 사용자에게 세션을 묻는다. 기본 세션에서 대신 진행하지 않는다.
-4. 로컬 세션이 확인되면 이후 생성, 조회, 입력, 대기 명령에 모두 `herdr --session "$session_name" ...`을 사용한다. 하위 에이전트 지침에도 해당 세션명을 전달한다. 화면의 세션 전환이나 상속 환경변수에 의존하지 않는다. 원격 대상은 별도의 `--machine` 규칙을 따른다.
-5. 필요한 명령 그룹을 인자 없이 실행해 구문을 확인한다. 예: `herdr agent`, `herdr pane`, `herdr plugin`. 같은 버전에서 이미 읽은 내용은 반복하지 않는다. 인자 없는 `herdr`는 화면을 실행하며, `workspace create` 같은 변경 명령은 인자가 없어도 실행될 수 있다.
-6. CLI에서 필요한 기능을 찾지 못하면 `herdr api schema`와 공식 socket 문서로 확장 표면을 확인한다. 전체 JSON schema는 크므로 임시 파일로 저장해 관련 method와 params만 읽는다.
+## 일반 명령
 
-## 실행 왕복 줄이기
+```sh
+herdr pane run "$pane" "$command"
+herdr pane wait-output "$pane" --regex "$pattern" --timeout 30000
+herdr pane read "$pane" --source recent-unwrapped --lines 80
+```
 
-- 대상이 정해졌으면 전체 목록 대신 해당 ID나 고유 이름을 사용한다. 첫 확인 이후에는 같은 대화에서 ID를 재사용하고, 이동 응답이나 종료 등 변경 근거가 있을 때 갱신한다.
-- 독립적인 조회는 한 도구 호출에서 병렬로 실행한다. 의존 명령도 응답을 파싱할 수 있으면 같은 도구 실행 안에서 순차 연결한다. 실패하거나 화면 해석이 필요하면 후속 입력 전에 결과를 확인한다.
-- 새 workspace와 tab에는 이미 root pane이 있다. 필요한 프로세스 수만큼만 패널을 만든다.
-- `agent start` 성공은 입력 준비까지 확인한 결과다. 정상 응답 뒤 고정 sleep이나 중복 상태 조회를 붙이지 않는다.
-- 출력 조건에는 `pane wait-output`, 에이전트에는 `agent wait`나 `agent prompt --wait`를 사용한다. 적절한 timeout을 정하고, 상태만 보고 실제 성공을 단정하지 않는다.
-- 정상 결과를 읽었으면 다시 전체 목록, 프로세스 정보, 레이아웃을 조회하지 않는다. 오류 시에는 관련 대상과 기능만 재확인한다.
+- `pane run` 성공은 접수일 뿐이다. 완료와 성공은 출력, 종료 코드, 산출물로 확인한다.
+- `wait-output`은 이미 있는 출력에도 매칭된다. 명령 에코가 아닌 실제 출력 줄에 맞는 패턴을 쓴다. `--match`는 리터럴, `--regex`는 Rust 정규식이다.
+- 셸 프롬프트가 아닌 pane에 보낸 입력은 전경 프로그램으로 간다. 불확실하면 `herdr pane process-info`로 확인한다.
+- 텍스트는 `pane send-text`, Enter나 Esc, Ctrl+C 같은 키는 `pane send-keys`로 보낸다.
+- 구문 오류는 종료 코드 2, 서버 오류는 종료 코드 1과 stderr의 JSON이다. `read`의 출력은 JSON이 아니라 텍스트다.
 
-## 필요한 상세 문서만 읽기
+## 에이전트
 
-| 작업                                                                      | 문서                                    |
-| ------------------------------------------------------------------------- | --------------------------------------- |
-| 대상 식별, 배치, 명령 입력, Copilot, Claude, Codex 제어, 출력과 오류 처리 | [기본 조작](herdr/operations.md)        |
-| worktree, 세션과 SSH, 알림, 연동, 플러그인, 설정, socket 자동화           | [작업 공간과 확장](herdr/automation.md) |
+```sh
+herdr agent start "$name" --kind codex --pane "$pane"    # 모델 등 제품 옵션은 `--` 뒤에
+herdr agent prompt "$name" "$prompt" --wait --timeout 45000
+herdr agent read "$name" --source recent-unwrapped --lines 80
+herdr agent get "$name"
+```
+
+- pane은 터미널 위치, agent는 그 안의 프로세스다. `agent start`는 pane을 만들지 않으며 셸 프롬프트 상태의 pane이 필요하다.
+- `kind`는 사용자가 지정한 제품(`claude`, `codex`, `copilot`)이다. 역할에 제품을 고정하지 않는다.
+- `name`은 `[a-z][a-z0-9_-]{0,31}` 형식이고 live 에이전트 사이에서 고유해야 한다.
+- `agent start` 성공은 입력 준비까지 확인한 결과다. 뒤에 sleep이나 상태 조회를 붙이지 않는다.
+- 프롬프트에는 목표, 맥락, 대상 경로, 허용한 변경 범위, 완료 조건을 넣는다.
+- 여러 에이전트가 같은 파일을 동시에 편집하게 하지 않는다.
+- `--wait`는 `idle`, `done`, `blocked` 중 하나에서 끝난다. 상태는 성공의 근거가 아니다. 응답이나 산출물로 확인한다.
+- 이미 작업 중인 에이전트는 `herdr agent wait "$name" --timeout "$ms"`로 기다린다.
+- 응답이 `read`로 안 보일 때만 에이전트에게 임시 Markdown 파일로 쓰게 한다.
+
+| 결과                              | 행동                                                                                                                                                                             |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `blocked`, `agent_blocked`        | `--source visible`로 화면을 읽는다. 승인된 범위 밖이면 사용자에게 묻는다. 프롬프트를 다시 보내지 않는다                                                                          |
+| `agent_pane_busy`                 | pane이 셸 프롬프트 상태가 아니다. 새 pane이면 `pane wait-output "$pane" --match "❯"`로 프롬프트를 기다린 뒤 다시 시작한다. 아니면 `pane process-info`로 전경 프로세스를 확인한다 |
+| `agent_not_ready`                 | 에이전트와 이름은 남아 있다. `get`, `read`로 화면을 확인하고 기다린다. 다시 시작하지 않는다                                                                                      |
+| `timeout`, `agent_prompt_stalled` | 이미 입력됐을 수 있다. 상태와 출력을 읽은 뒤 재전송을 판단한다                                                                                                                   |
+| `agent_not_found`                 | 이름 해제나 ID 변경을 확인하고 `agent list`로 다시 찾는다                                                                                                                        |
+| `unknown`, 상태와 화면 불일치     | `herdr agent explain "$name"`으로 확인한다. 성공으로 해석하지 않는다                                                                                                             |
+
+## 왕복 줄이기
+
+- 대상이 정해지면 전체 목록을 다시 조회하지 않고 ID를 재사용한다.
+- 독립적인 조회는 한 번의 도구 호출에서 병렬로 실행한다. 의존하는 명령은 응답을 파싱해 같은 실행 안에서 잇는다.
+- 정상 결과 뒤에 목록, 프로세스 정보, 레이아웃을 다시 조회하지 않는다.
+- 기다릴 때는 `pane wait-output`, `agent wait`, `agent prompt --wait`를 쓴다. 고정 sleep을 쓰지 않는다.
+
+## 금지와 주의
+
+- `herdr server stop`, 세션 중지, Herdr 프로세스 종료를 하지 않는다. 격리가 필요한 실험은 이름 있는 테스트 세션에서 한다.
+- `layout.apply`에 `tab_id`를 주면 그 탭의 프로세스가 종료될 수 있다. 실행 중인 터미널의 재배치에 쓰지 않는다.
+- `workspace close`는 화면만 닫는다. `worktree remove`는 checkout을 지우고 브랜치는 남긴다.
+- worktree는 해당 프로젝트의 생성 도구와 작업 위치 지침을 먼저 따른다.
+- `--force`, `--group`, `--trust-repository`를 실패 우회용으로 붙이지 않는다.
+- integration과 plugin의 설치, 제거, 설정 변경은 요청받았을 때만 한다. 설정을 바꾼 뒤에는 `herdr config check`, `herdr server reload-config` 순으로 반영한다.
+- `agent.view.set`은 사용자의 사이드바 표시를 바꾼다. 조사 목적으로 호출하지 않는다.
+- `herdr notification show`는 완료나 사용자 개입이 필요한 상태 변화에만 쓴다.
+
+## 확장
+
+- CLI에 없는 기능만 socket API로 한다. `herdr api schema --output "$path"`로 저장해 필요한 method만 읽는다. 현재 상태는 `herdr api snapshot`으로 읽는다.
+- 요청은 `HERDR_SOCKET_PATH`에 `id`, `method`, `params`를 담은 JSON 한 줄로 보낸다.
+- 지속 감시는 반복 조회 대신 `events.subscribe`, `events.wait`를 쓴다.
+- 사이드바 표시값은 `pane report-metadata`, `workspace report-metadata`의 token으로 넣는다. `plugin:` source는 플러그인만 쓴다.
+- 플러그인은 `herdr-plugin.toml`과 실행 명령으로 구성된다. 설치와 활성화 상태는 모든 세션이 공유하므로 테스트 세션으로 격리되지 않는다.
+- 플러그인 안에서는 `HERDR_BIN_PATH`로 Herdr를 호출한다. popup pane에는 `HERDR_PANE_ID`가 없다.
+- 새 플러그인을 만들기 전에 `herdr plugin list`, `herdr plugin action list`로 기존 기능을 확인한다.
+
+SSH 머신(`--machine`, `--remote`)과 terminal attach는 해당 그룹 도움말과 `herdr --skill`을 따른다. `--machine`에는 `--session`, `--remote`를 함께 붙이지 않는다.
+
+문서: [CLI](https://herdr.dev/tui/docs/cli-reference/), [Socket API](https://herdr.dev/tui/docs/socket-api/), [플러그인](https://herdr.dev/tui/docs/plugins/), [에이전트 자동화](https://herdr.dev/tui/docs/agent-automation/)
