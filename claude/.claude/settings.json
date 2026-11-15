@@ -138,6 +138,7 @@
     }
   },
   "language": "Korean",
+  "outputStyle": "fluent-korean:fluent-korean",
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
   "modelSettings": {
