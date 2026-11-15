@@ -18,7 +18,8 @@ configure_gpg_key() {
             keys+=("$key_id")
         elif [[ "$line" =~ ^uid ]]; then
             local email
-            email=$(echo "$line" | sed 's/.*<\(.*\)>.*/\1/')
+            email=${line##*<}
+            email=${email%%>*}
             emails+=("$email")
         fi
     done < <(gpg --list-secret-keys --keyid-format long 2>/dev/null)
@@ -80,7 +81,7 @@ configure_git() {
     git config --global user.name "$git_username"
     git config --global user.email "$git_email"
     git config --global core.editor "vim"
-    git config --global core.excludesfile "~/.gitignore"
+    git config --global core.excludesfile "$HOME/.gitignore"
     git config --global gpg.program "$(brew --prefix)/bin/gpg"
     git config --global commit.gpgsign "true"
     git config --global tag.gpgsign "true"

@@ -50,6 +50,7 @@ zstyle ':fzf-tab:*' switch-group ',' '.'  # 그룹 전환: , .
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
 # Homebrew fzf 경로 (Apple Silicon / Intel)
+# shellcheck disable=SC1094 # fzf's zsh scripts don't parse as bash
 if [[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]]; then
   source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
   source /opt/homebrew/opt/fzf/shell/completion.zsh
