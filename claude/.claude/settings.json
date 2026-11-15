@@ -158,13 +158,6 @@
       "effortLevel": "xhigh"
     }
   },
-  "pluginConfigs": {
-    "grafana-mcp@claude-plugins-official": {
-      "options": {
-        "grafana_url": "https://riiid.grafana.net"
-      }
-    }
-  },
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
