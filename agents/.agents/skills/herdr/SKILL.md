@@ -1,6 +1,11 @@
+---
+name: herdr
+description: Herdr 터미널의 pane, tab, workspace와 그 안의 에이전트(Claude, Codex 등)를 다룬다. 사용자가 화면에 보이는 터미널을 열거나 나누거나 옮기거나 닫으라고 할 때, 또는 다른 pane에서 명령이나 에이전트를 실행하고 결과를 읽으라고 할 때 쓴다. Herdr라는 단어가 없어도 해당한다(예: "하단에 클로드 띄워놔"). 병렬 작업이나 백그라운드 실행이 편하다는 이유만으로 쓰지 않는다.
+---
+
 # Herdr
 
-사용자가 Herdr 사용을 요청한 범위에서만 쓴다. 구문의 정본은 설치된 CLI다. 여기에 없는 것은 `herdr pane` 같은 그룹 도움말과 `herdr --skill`로 확인한다. `herdr` 단독은 TUI를 띄우고 `herdr workspace create` 같은 변경 명령은 인자 없이도 실행되므로 탐색용으로 쓰지 않는다.
+사용자가 요청한 범위에서만 쓴다. 구문의 정본은 설치된 CLI다. 여기에 없는 것은 `herdr pane` 같은 그룹 도움말과 `herdr --skill`로 확인한다. `herdr` 단독은 TUI를 띄우고 `herdr workspace create` 같은 변경 명령은 인자 없이도 실행되므로 탐색용으로 쓰지 않는다.
 
 ## 시작 전 확인
 

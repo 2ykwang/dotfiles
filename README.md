@@ -12,7 +12,7 @@ just link plugins claude hooks configure
 ```
 
 Install this repository at `~/dotfiles`. Stow uses its parent directory as the
-link target, and the shared agent instructions read guides from this location.
+link target.
 
 After the first setup, `just all` runs every step at once.
 
@@ -30,10 +30,11 @@ After the first setup, `just all` runs every step at once.
 ## Layout
 
 Each top-level directory is a stow package mirroring `$HOME`:
-`zsh`, `vim`, `tmux`, `git`, `ghostty`, `gnupg`, `lazygit`, `claude`, `codex`, `herdr`, `zed`.
+`zsh`, `vim`, `tmux`, `git`, `ghostty`, `gnupg`, `lazygit`, `claude`, `codex`, `agents`, `herdr`, `zed`.
 
-- `claude/.claude/` — Claude Code global settings (`CLAUDE.md`, `settings.json`), linked into `~/.claude`
-- `codex/.codex/AGENTS.md` is a relative symlink to `claude/.claude/CLAUDE.md`, so Claude and Codex share one global instruction file. Shared coding rules live in `agent-guides/code.md`; `agent-guides/AGENTS.md` routes coding tasks to them.
+- `claude/.claude/` — Claude Code global settings (`CLAUDE.md`, `settings.json`, path-scoped `rules/`), linked into `~/.claude`
+- `codex/.codex/AGENTS.md` is a relative symlink to `claude/.claude/CLAUDE.md`, so Claude and Codex share one global instruction file, coding rules included.
+- `agents/.agents/skills/`: skills shared by Claude and Codex. Codex reads them from `~/.agents/skills`; relative symlinks in `claude/.claude/skills/` expose them to Claude.
 - The Claude statusline resolves `scripts/statusline.py` from the repository behind
   the `~/.claude/settings.json` symlink.
 - `zsh/.config/zsh/aliases-secret.zsh` — machine-local secrets, untracked; `.zshrc` sources it only when present
