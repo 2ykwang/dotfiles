@@ -37,7 +37,7 @@ plugins:
 claude:
     @bash scripts/claude.sh
 
-# Install the pre-commit git hook into .git/hooks (once per clone)
+# Install the pre-commit and pre-push git hooks into .git/hooks (once per clone)
 hooks:
     @pre-commit install
 

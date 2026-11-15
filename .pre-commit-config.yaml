@@ -1,3 +1,6 @@
+default_install_hook_types: [pre-commit, pre-push]
+default_stages: [pre-commit]
+
 repos:
   # 기본 검사
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -20,7 +23,7 @@ repos:
         entry: shellcheck -x
         language: system
         types: [shell]
-        files: \.(sh|zsh)$
+        files: (\.sh|\.zsh|\.zshrc)$
 
   # Uses the Brewfile's gitleaks binary. It picks up .gitleaks.toml from the
   # repo root and reads the staged diff itself, so it takes no filenames.
@@ -31,3 +34,24 @@ repos:
         entry: gitleaks git --pre-commit --staged --redact --verbose --no-banner
         language: system
         pass_filenames: false
+
+  # The commit stage only sees changed files, so recheck every shell script
+  # and the commits being pushed. This also catches --no-verify commits.
+  - repo: local
+    hooks:
+      - id: shellcheck-all
+        name: shellcheck (all files)
+        entry: pre-commit run shellcheck --all-files
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+      # Pushing from the root commit leaves FROM_REF empty, so this scans the
+      # full history.
+      - id: gitleaks-push
+        name: gitleaks (push range)
+        entry: bash -c 'gitleaks git --log-opts="${PRE_COMMIT_FROM_REF:+$PRE_COMMIT_FROM_REF..}$PRE_COMMIT_TO_REF" --redact --verbose --no-banner'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
